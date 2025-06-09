@@ -40,15 +40,27 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <form action="{{ route('siswa.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <img class="rounded-full w-32 h-32 bg-gray-600 mx-auto" src="" alt="image description">
+                        <div id="preview-container" class="rounded-full w-32 h-32 bg-gray-600 mx-auto flex items-center justify-center overflow-hidden">
+                            <!-- Default icon (Flowbite Heroicon) -->
+                            <svg id="default-icon" class="w-30 h-30 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+                                    d="M5.121 17.804A8.001 8.001 0 0112 16c2.042 0 3.903.767 5.292 2.03M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                            </svg>
+
+                            <!-- Image tag, disembunyikan dulu -->
+                            <img id="preview-image" class="hidden w-full h-full object-cover" alt="Preview Foto">
+                        </div>
                         <div class="grid md:grid-cols-2 md:gap-6 items-center mt-auto">
                             <div class="mb-6 mt-4">
                                 <label for="nama" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Nama</label>
                                 <input type="text" name="nama" id="nama" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Nama">
                             </div>
                             <div class="mt-auto">
-                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload file</label>
-                                <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="file_input_help" id="foto" name="foto" type="file">
+                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="foto">Upload file</label>
+                                <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                    aria-describedby="file_input_help" id="foto" name="foto" type="file" accept="image/*">
                                 <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
                             </div>
                         </div>
@@ -89,3 +101,12 @@
 
     </div>
 </x-app-layout>
+<script>
+    document.getElementById('foto').addEventListener('change', function(e) {
+        const [file] = e.target.files;
+        if (file) {
+            const preview = document.getElementById('preview-image');
+            preview.src = URL.createObjectURL(file);
+        }
+    });
+</script>

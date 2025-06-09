@@ -12,13 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('siswa', function (Blueprint $table) {
-            $table->id('nis');
+            $table->id();
+            $table->string('nis')->unique();
             $table->string('nisn')->unique();
             $table->string('nama', 100);
             $table->string('no_hp', 20)->nullable();
             $table->string('foto')->nullable();
             $table->foreignId('kelas_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

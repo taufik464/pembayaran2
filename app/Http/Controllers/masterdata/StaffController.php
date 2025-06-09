@@ -40,13 +40,13 @@ class StaffController extends Controller
 
         // Buat user baru terlebih dahulu
         $user = User::create([
-            'username' => $validated['nik'],
+            'name' => $validated['nik'],
             'email' => $validated['email'],
             'password' => bcrypt($validated['password']),
             'role' => 'staff', // Atur role sesuai kebutuhan
         ]);
 
-       
+
 
         // Buat staff baru dan hubungkan dengan user
         Staff::create([

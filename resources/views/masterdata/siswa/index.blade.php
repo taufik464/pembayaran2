@@ -85,20 +85,29 @@
                         <td class="px-6 py-2">
                             {{ $siswa->kelas->nama }}
                         </td>
-                        <td class="px-6 py-2 text-right">
-                            <div class="flex justify-end space-x-2 rtl:space-x-reverse">
-                                <a href="" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M17.414 2.586a2 2 0 0 1 0 2.828l-12.5 12.5a2 2 0 0 1-1.414.586H2a1 1 0 0 1-1-1v-1.586a2 2 0 0 1 .586-1.414l12.5-12.5a2 2 0 0 1 2.828 0zM15.414 4l-10.5 10.5V16h1.586L16.414 6.586A2 2 0 0 0 15.414 4z" />
+                        <td class="px-6 py-2 text-right align-middle">
+                            <div class="flex justify-end items-center space-x-2 rtl:space-x-reverse">
+                                <!-- Tombol Edit -->
+                                <a href="{{ route('siswa.edit', $siswa->id) }}"
+                                    class="text-blue-600 dark:text-blue-500 hover:underline flex items-center">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M17.414 2.586a2 2 0 0 1 0 2.828l-12.5 12.5a2 2 0 0 1-1.414.586H2a1 1 0 0 1-1-1v-1.586a2 2 0 0 1 .586-1.414l12.5-12.5a2 2 0 0 1 2.828 0zM15.414 4l-10.5 10.5V16h1.586L16.414 6.586A2 2 0 0 0 15.414 4z" />
                                     </svg>
                                 </a>
-                                |
-                                <form action="" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                <!-- Separator -->
+                                <span>|</span>
+                                <!-- Tombol Hapus -->
+                                <form action="{{ route('siswa.destroy',  $siswa->id) }}" method="POST"
+                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')" class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="font-medium text-red-600 dark:text-red-500 hover:underline">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M10 1a1 1 0 0 1 1 1v2h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h4V2a1 1 0 0 1 1-1zm3.5 4h-7l-.5.5v11l.5.5h7l.5-.5V5.5l-.5-.5z" />
+                                    <button type="submit" class="text-red-600 dark:text-red-500 hover:underline flex items-center">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M10 1a1 1 0 0 1 1 1v2h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h4V2a1 1 0 0 1 1-1zm3.5 4h-7l-.5.5v11l.5.5h7l.5-.5V5.5l-.5-.5z" />
                                         </svg>
                                     </button>
                                 </form>

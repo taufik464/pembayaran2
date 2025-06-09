@@ -33,62 +33,61 @@
         </nav>
     </x-slot>
 
-    <div class="py-8">
-        <div class="py-8">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <form action="{{ route('siswa.update', $siswa->id) }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            @method('PUT')
-                            <img class="rounded-full w-32 h-32 bg-gray-600 mx-auto" src="{{ $siswa->foto ? asset('storage/' . $siswa->foto) : asset('images/default.png') }}" alt="Foto Siswa">
-                            <div class="grid md:grid-cols-2 md:gap-6 items-center mt-auto">
-                                <div class="mb-6 mt-4">
-                                    <label for="nama" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Nama</label>
-                                    <input type="text" name="nama" id="nama" value="{{$siswa->nama }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Nama">
-                                </div>
-                                <div class="mt-auto">
-                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload file</label>
-                                    <input class="block w-full  text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="file_input_help" id="foto" name="foto" type="file" value="{{ $siswa->foto }}">
-                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
-                                </div>
-                            </div>
-                            <div class="grid md:grid-cols-2 md:gap-6 ">
-                                <div class="mb-6 mt-4">
-                                    <label for="nisn" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">NISN</label>
-                                    <input type="text" name="nisn" id="nisn" value="{{ $siswa->nisn }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="NIS" required>
-                                </div>
-                                <div class="mb-6 mt-4">
-                                    <label for="nis" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">NIS</label>
-                                    <input type="text" name="nis" id="nis" value="{{ $siswa->nis }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="NIS" required>
-                                </div>
-                            </div>
-                            <div class="grid md:grid-cols-2 md:gap-6 ">
-                                <div class="mb-6 mt-4">
-                                    <label for="kelas" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Kelas</label>
-                                    <select name="kelas_id" id="kelas" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required>
-                                        <option value="{{ $siswa->kelas->id }}" selected>{{ $siswa->kelas->nama }}</option>
-                                        @foreach ($kelas as $k)
-                                        @if ($k->id != $siswa->kelas->id)
-                                        <option value="{{ $k->id }}">{{ $k->nama }}</option>
-                                        @endif
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="mb-6 mt-4">
-                                    <label for="phone-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone number:</label>
-                                    <input type="text" name="no_hp" id="no_hp" value="{{ $siswa->no_hp }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="No HP">
-                                    <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Select a phone number that matches the format.</p>
-                                </div>
-                            </div>
-                            <a href="{{ route('siswa.index') }}" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Kembali</a>
 
-                            <button type="submit" class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Simpan</button>
+    <div class="py-4">
 
-                        </form>
+        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="p-8 text-gray-900 dark:text-gray-100">
+
+                <form action="{{ route('siswa.update',  $siswa->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <img class="rounded-full w-32 h-32 bg-gray-600 mx-auto" src="{{ $siswa->foto ? asset('storage/' . $siswa->foto) : 'https://ui-avatars.com/api/?name=' . urlencode($siswa->nama) . '&background=6b7280&color=fff&size=128&rounded=true' }}" alt="Foto Siswa">
+                    <div class="grid md:grid-cols-2 md:gap-6 items-center mt-auto">
+                        <div class="mb-6 mt-4">
+                            <label for="nama" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Nama</label>
+                            <input type="text" name="nama" id="nama" value="{{ old('nama', $siswa->nama) }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Nama" required>
+                        </div>
+                        <div class="mt-auto">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="foto">Upload file</label>
+                            <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="file_input_help" id="foto" name="foto" type="file" accept="image/jpeg,image/png,image/jpg">
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="file_input_help">Format jpeg, png, dan jpg.</p>
+                        </div>
                     </div>
-                </div>
+                    <div class="grid md:grid-cols-2 md:gap-6">
+                        <div class="mb-6 mt-4">
+                            <label for="nisn" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">NISN</label>
+                            <input type="text" name="nisn" id="nisn" value="{{ old('nisn', $siswa->nisn) }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="NISN" required>
+                        </div>
+                        <div class="mb-6 mt-4">
+                            <label for="nis" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">NIS</label>
+                            <input type="text" name="nis" id="nis" value="{{ old('nis', $siswa->nis) }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="NIS" required>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 md:gap-6">
+                        <div class="mb-6 mt-4">
+                            <label for="kelas" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Kelas</label>
+                            <select name="kelas_id" id="kelas" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required>
+                                <option value="{{ $siswa->kelas->id }}" selected>{{ $siswa->kelas->nama }}</option>
+                                @foreach ($kelas as $k)
+                                @if ($k->id != $siswa->kelas->id)
+                                <option value="{{ $k->id }}">{{ $k->nama }}</option>
+                                @endif
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-6 mt-4">
+                            <label for="no_hp" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone number:</label>
+                            <input type="text" name="no_hp" id="no_hp" value="{{ old('no_hp', $siswa->no_hp) }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="No HP">
+                            <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Select a phone number that matches the format.</p>
+                        </div>
+                    </div>
+                    <a href="{{ route('siswa.index') }}" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Kembali</a>
+                    <button type="submit" class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Simpan</button>
+                </form>
             </div>
 
         </div>
+
+
 </x-app-layout>

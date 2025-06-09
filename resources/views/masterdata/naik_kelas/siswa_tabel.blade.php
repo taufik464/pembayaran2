@@ -15,7 +15,7 @@
         @foreach ($siswa as $s)
         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
             <td class="px-4 py-3 text-center">
-                <input type="checkbox" name="siswa[]" value="{{ $s->nis }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm">
+                <input type="checkbox" name="siswa[]" value="{{ $s->id }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm">
             </td>
             <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ $s->nis }}</td>
             <td class="px-6 py-4">{{ $s->kelas->nama }}</td>

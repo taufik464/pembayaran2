@@ -55,10 +55,7 @@ class SiswaController extends Controller
         return redirect()->route('siswa.index')->with('success', 'Siswa created successfully.');
     }
 
-    public function show($id)
-    {
-        // Retrieve and display a specific siswa
-    }
+    
 
     public function edit($id)
     {
@@ -72,19 +69,18 @@ class SiswaController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'nis' => 'required|string|max:255|unique:siswa,nis,' . $id,
-            'nisn' => 'required|string|max:255|unique:siswa,nisn,' . $id,
+            'nis' => 'required|string|max:20|unique:siswa,nis,' . $id,
+            'nama' => 'required|string|max:100',
+            'nisn' => 'required|string|max:20|unique:siswa,nisn,' . $id,
             'kelas_id' => 'required|exists:kelas,id',
             'no_hp' => 'nullable|string|max:15',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $siswa = Siswa::findOrFail($id);
         $siswaData = $request->except('foto');
 
         if ($request->hasFile('foto')) {
-            // Delete the old photo if it exists
             if ($siswa->foto) {
                 Storage::disk('public')->delete($siswa->foto);
             }

@@ -30,7 +30,7 @@ class naik_kelasController extends Controller
         ]);
 
         try {
-            $updated = Siswa::whereIn('nis', $validated['siswa'])
+            $updated = Siswa::whereIn('id', $validated['siswa'])
                 ->update(['kelas_id' => $validated['kelas_tujuan']]);
 
             if ($updated === 0) {

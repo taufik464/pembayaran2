@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('p_bulanans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('siswa_id')->constrained('siswa', 'nis')->onDelete('cascade');
+            $table->foreignId('siswa_id')->constrained('siswa')->onDelete('cascade');
             $table->foreignId('tahun_id')->constrained('periodes')->onDelete('cascade');
             $table->foreignId('jenis_pembayaran_id')->constrained('jenis_pembayarans',)->onDelete('cascade');
             $table->tinyInteger('bulan')->unsigned()->comment('1=Juli, 2=Agustus, ..., 12=Juni');
