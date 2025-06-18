@@ -26,8 +26,8 @@
         </nav>
     </x-slot>
 
-    <div class="flex flex-col lg:flex-row lg:gap-4">
-        <div class="flex-1 flex flex-col gap-4 mb-4 lg:mb-0">
+    <div class="flex flex-row">
+        <div class="basis-9/12  ">
             <form method="GET" action="{{ route('kelola-pembayaran.index') }}" class="flex items-center p-2 gap-2 mi bg-white rounded-md">
                 <input type="text" name="nis" class="border px-2 py-1 rounded w-60" placeholder="Masukkan NIS" value="{{ request('nis') }}">
                 <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1 rounded">Cari</button>
@@ -91,7 +91,7 @@
             @endif
 
         </div>
-        <div class="w-full lg:w-3/12">
+        <div class="basis-3/12 ml-4">
             <div class="h-400 bg-white p-4 rounded shadow  min-h-[446px] h-full  ">
                 <div class="">
                     <h1 class="text-xl font-bold">Total Pembayaran</h1>

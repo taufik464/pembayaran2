@@ -1,0 +1,1 @@
+<img src="{{ asset('img/logo_alhikmah.jpg') }}" alt="Application Logo" class="h-20 w-auto fill-current text-gray-800 dark:text-gray-200">

@@ -7,9 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Metode extends Model
 {
     protected $table = 'metode_bayar';
-   
-  
-
+    protected $primaryKey = 'id';
     protected $fillable = [
         'nama'
     ];

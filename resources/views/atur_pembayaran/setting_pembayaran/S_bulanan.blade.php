@@ -79,7 +79,7 @@
 
                         <div class="mb-4">
                             <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kelas</label>
-                            <select name="kelas_or_angkatan" id="kelas_or_angkatan" class="block max-h-[30px] w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <select name="kelas_or_angkatan" id="kelas_or_angkatan" class="block  w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option disabled selected>Pilih Kelas atau Angkatan</option>
                                 <option value="all">Semua Kelas</option>
                                 <optgroup label="Berdasarkan Angkatan (Tingkatan)">
@@ -94,6 +94,7 @@
                                 </optgroup>
                             </select>
                         </div>
+                        <h3 class="block text-lg font-semibold mb-4">Jika hanya siswa tertentu</h3>
 
                         <div class="mb-4">
                             <label for="nis" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NIS</label>
@@ -136,7 +137,7 @@
                 <!-- Kolom kanan -->
                 <div class="flex flex-col w-full md:w-6/12 gap-4">
                     <div class="bg-blue-500 text-white p-3 rounded">
-                        <h3 class="text-lg font-semibold">Kolom Tambahan</h3>
+                        <h3 class="text-lg font-semibold">Kolom Harga</h3>
                     </div>
 
                     <div class="w-full bg-gray-100 p-4 rounded-lg">

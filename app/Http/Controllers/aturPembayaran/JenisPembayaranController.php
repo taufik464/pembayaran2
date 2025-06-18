@@ -135,9 +135,14 @@ class JenisPembayaranController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(JenisPembayaran $jenisPembayaran)
+    public function destroy($id)
     {
-        $jenisPembayaran->delete();
-        return redirect()->route('jenis-pembayaran.index')->with('success', 'Data berhasil dihapus');
+        try {
+            $jenisPembayaran = JenisPembayaran::findOrFail($id);
+            $jenisPembayaran->delete();
+            return redirect()->route('jenis-pembayaran.index')->with('success', 'Data berhasil dihapus');
+        } catch (\Exception ) {
+            return redirect()->route('jenis-pembayaran.index')->with('error', 'Gagal menghapus data');
+        }
     }
 }

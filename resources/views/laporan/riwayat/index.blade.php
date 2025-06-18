@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">
-            {{ __('Data Staff') }}
+            {{ __('Data Riwayat Transaksi') }}
         </h2>
         <nav class="flex" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse mt-1">
@@ -18,7 +18,7 @@
                         <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 dark:text-gray-300 mt-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
                         </svg>
-                        <a href="{{ route('staff.index') }}" class="ms-1 text-xs font-medium text-gray-700 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 md:ms-2">Data Staff</a>
+                        <a href="{{ route('riwayat.index') }}" class="ms-1 text-xs font-medium text-gray-700 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 md:ms-2">Riwayat Transaksi</a>
                     </div>
                 </li>
             </ol>
@@ -40,25 +40,32 @@
                         <input type="text" id="table-search" class="block pt-2 ps-10 text-sm text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg w-80 bg-gray-50 dark:bg-gray-800 focus:ring-blue-500 focus:border-blue-500" placeholder="Search for items">
                     </div>
                 </div>
-                <a href="{{ route('staff.create') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:ring-green-300 dark:bg-green-500 dark:hover:bg-green-600 focus:outline-none dark:focus:ring-green-800">
-                    Tambah Data
-                </a>
+               
             </div>
 
             <table class="w-full mt-2 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3 font-medium dark:text-white">
-                            Nama
+                            No
                         </th>
                         <th scope="col" class="px-6 py-3 font-medium dark:text-white">
-                            Email
+                            Taggal
                         </th>
                         <th scope="col" class="px-6 py-3 font-medium dark:text-white">
-                            No Hp
+                            Nama Siswa
                         </th>
                         <th scope="col" class="px-6 py-3 font-medium dark:text-white">
-                            Jabatan
+                            Total Pembayaran
+                        </th>
+                        <th scope="col" class="px-6 py-3 font-medium dark:text-white">
+                            metode Bayar
+                        </th>
+                        <th scope="col" class="px-6 py-3 font-medium dark:text-white">
+                            Jumlah Uang
+                        </th>
+                        <th scope="col" class="px-6 py-3 font-medium dark:text-white">
+                            Staff TU
                         </th>
                         <th scope="col" class="px-6 py-3 font-medium dark:text-white">
                             <span class="sr-only">Edit</span>
@@ -66,35 +73,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($staffs as $staff)
+                    @foreach($riwayat as $r)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $staff->nama }}
+                            {{ $loop->iteration }}
+                        </td>
+                        <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{ $r['tanggal'] }}
                         </td>
                         <td class="px-6 py-3 font-medium dark:text-white">
-                            {{ $staff->email }}
+                            {{ $r['nama_siswa'] }}
                         </td>
                         <td class="px-6 py-3 font-medium dark:text-white">
-                            {{ $staff->no_hp }}
+                            {{ $r['total_pembayaran'] }}
                         </td>
                         <td class="px-6 py-3 font-medium dark:text-white">
-                            {{ $staff->jabatan }}
+                            {{ $r['metode_pembayaran'] }}
                         </td>
-                        <td class="px-2 py-3 relative" x-data="{ open: false }">
-                            <button @click="open = !open" class="text-gray-600 dark:text-white hover:text-black dark:hover:text-white focus:outline-none">
-                                &#8942;
-                            </button>
-
-                            <div x-show="open" @click.away="open = false" class="absolute right-0 z-10 mt-2 w-36 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-md">
-                                <a href="{{ route('staff.edit', $staff->id) }}" class="block px-4 py-2 text-sm text-blue-600 dark:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700">Edit</a>
-                                <form action="{{ route('staff.destroy', $staff->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">Hapus</button>
-                                </form>
-                            </div>
+                        <td class="px-6 py-3 font-medium dark:text-white">
+                            {{ $r['Jumlah_uang'] }}
                         </td>
-
+                        <td class="px-6 py-3 font-medium dark:text-white">
+                            {{ $r['Staff']}}
+                        </td>
+                       
                     </tr>
                     @endforeach
                 </tbody>

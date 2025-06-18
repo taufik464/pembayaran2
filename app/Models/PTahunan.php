@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+
 use Illuminate\Support\Facades\Schema;
 
 
@@ -40,6 +41,14 @@ class PTahunan extends Model
     }
     public function siswa()
     {
-        return $this->belongsTo(Siswa::class, 'siswa_id', 'nis');
+        return $this->belongsTo(Siswa::class, 'siswa_id', );
+    }
+    public function tahun()
+    {
+        return $this->belongsTo(Periode::class, 'tahun_id',);
+    }
+    public function aTahunan()
+    {
+        return $this->hasMany(ATahunan::class, 'tahunan_id', 'id');
     }
 }

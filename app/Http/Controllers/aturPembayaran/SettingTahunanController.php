@@ -33,7 +33,7 @@ class SettingTahunanController extends Controller
     {
         $nis = $request->query('nis');
 
-        $siswa = Siswa::where('nis', $nis)->first();
+        $siswa = Siswa::where('id', $nis)->first();
 
         if (!$siswa) {
             return response()->json(['error' => 'Siswa tidak ditemukan'], 404);
@@ -81,31 +81,47 @@ class SettingTahunanController extends Controller
             return back()->withErrors(['kelas_or_angkatan' => 'Tidak ada siswa yang ditemukan.']);
         }
 
+        $sudahAda = [];
+        $siswaDisimpan = [];
+
         DB::beginTransaction();
         try {
             foreach ($siswaList as $siswa) {
                 foreach ($request->jenis_pembayaran as $index => $jenisId) {
-                    PTahunan::updateOrCreate(
-                        [
-                            'siswa_id' => $siswa->nis,
-                            'tahun_id' => $request->tahun,
-                            'jenis_pembayaran_id' => $jenisId,
-                        ],
-                        [
-                            'harga' => $request->nominal[$index] ?? 0,
-                        ]
-                    );
+                    $cek = PTahunan::where('siswa_id', $siswa->id)
+                        ->where('tahun_id', $request->tahun)
+                        ->where('jenis_pembayaran_id', $jenisId)
+                        ->first();
+                    if ($cek) {
+                        $sudahAda[] = $siswa->nama . ' (' . $siswa->nis . ') - ' . JenisPembayaran::find($jenisId)->nama;
+                        continue; // Abaikan siswa yang sudah ada
+                    }
+                    PTahunan::create([
+                        'siswa_id' => $siswa->id,
+                        'tahun_id' => $request->tahun,
+                        'jenis_pembayaran_id' => $jenisId,
+                        'harga' => $request->nominal[$index] ?? 0,
+                    ]);
+                    $siswaDisimpan[] = $siswa->nama . ' (' . $siswa->nis . ') - ' . JenisPembayaran::find($jenisId)->nama;
                 }
             }
             DB::commit();
-            return redirect()->route('setting-tahunan.index')->with('success', 'Pembayaran tahunan berhasil disimpan.');
+
+            $pesan = [];
+            if (!empty($siswaDisimpan)) {
+                $pesan[] = 'Pembayaran tahunan berhasil disimpan untuk: ' . implode(', ', $siswaDisimpan) . '.';
+            }
+            if (!empty($sudahAda)) {
+                $pesan[] = 'Sudah ada pembayaran untuk: ' . implode(', ', $sudahAda) . '.';
+            }
+            return redirect()->route('setting-tahunan.index')->with('success', implode(' ', $pesan));
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan data. ' . $e->getMessage()]);
         }
     }
 
-
+/*
     public function destroy($id)
     {
         $pembayaran = PTahunan::findOrFail($id);
@@ -132,5 +148,5 @@ class SettingTahunanController extends Controller
         ]);
 
         return redirect()->route('jenis-pembayaran.index')->with('success', 'Data berhasil diubah.');
-    }
+    }*/
 }

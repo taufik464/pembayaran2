@@ -9,7 +9,7 @@
         <div class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4  ">
             <!-- Pendapatan Harian -->
             <div class="bg-violet-100 rounded-2xl p-4 shadow-sm">
-                <p class="text-sm text-gray-600 mb-1">Pendapatan Harian</p>
+                <p class="text-sm text-gray-600 mb-1">Total Pembayaran</p>
                 <p class="text-xl font-semibold">Rp. {{ number_format($totalHarian, 0, ',', '.') }}</p>
             </div>
 

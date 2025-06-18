@@ -4,8 +4,9 @@ namespace App\Http\Controllers\aturPembayaran;
 use App\Http\Controllers\Controller;
 
 use App\Models\JenisPembayaran;
-use App\Models\PembayaranLain;
+use App\Models\Siswa;
 use App\Models\PTambahan;
+
 
 use Illuminate\Http\Request;
 
@@ -22,6 +23,8 @@ class settingPtambahanController extends Controller
             'siswa_id' => 'required|exists:siswa,nis',
         ]);
 
+        $id_siswa = Siswa::where('nis', $request->siswa_id)->value('id');
+
         foreach ($request->pt_id as $ptId) {
             $nominal = JenisPembayaran::where('id', $ptId)
                 ->where('tipe_pembayaran', 'tambahan')
@@ -29,7 +32,7 @@ class settingPtambahanController extends Controller
 
             PTambahan::create([
             'jenis_pembayaran_id' => $ptId,
-            'siswa_id' => $request->siswa_id,
+            'siswa_id' => $id_siswa,
             'harga' => $nominal,
             ]);
         }

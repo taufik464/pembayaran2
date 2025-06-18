@@ -25,11 +25,10 @@
         </nav>
     </x-slot>
 
-    <div class="p-6 mt-4 bg-white rounded-lg rounded shadow">
+    <div class="p-6 mt-4 bg-white dark:bg-gray-800 rounded-lg shadow">
         <div class="flex justify-between items-center mb-4">
             <div class="flex items-center space-x-2">
-                <input type="text" placeholder="Search..." class="border p-2 rounded w-64">
-
+                <input type="text" placeholder="Search..." class="border p-2 rounded w-64 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600">
             </div>
             <div class="flex items-center space-x-2">
                 <a type="button" href="{{ route('setting-bulanan.index') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm text-center leading-tight w-fit block">
@@ -39,39 +38,37 @@
                     Setting Tahunan
                 </a>
                 <a href="{{  route('jenis-pembayaran.create')}}" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm text-center leading-tight w-fit block">Tambah Data</a>
-
             </div>
         </div>
 
-        <table class="w-full text-left border border-gray-200 rounded">
+        <table class="w-full text-left border border-gray-200 dark:border-gray-700 rounded">
             <thead>
-                <tr class="bg-gray-100">
-                    <th class="px-4 py-2">#</th>
-                    <th class="px-4 py-2">Nama Pembayaran</th>
-                    <th class="px-4 py-2">Tahun</th>
-                    <th class="px-4 py-2">Tipe</th>
-                    <th class="px-4 py-2">Aksi</th>
+                <tr class="bg-gray-100 dark:bg-gray-700">
+                    <th class="px-4 py-2 text-gray-700 dark:text-gray-200">#</th>
+                    <th class="px-4 py-2 text-gray-700 dark:text-gray-200">Nama Pembayaran</th>
+                    <th class="px-4 py-2 text-gray-700 dark:text-gray-200">Tahun</th>
+                    <th class="px-4 py-2 text-gray-700 dark:text-gray-200">Tipe</th>
+                    <th class="px-4 py-2 text-gray-700 dark:text-gray-200">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($jenis_pembayaran as $index => $item)
-                <tr class="border-t">
-                    <td class="px-2 py-2">{{ $loop->iteration}}</td>
-                    <td class="px-2 py-2">{{ $item->nama }}</td>
-                    <td class="px-2 py-2">{{ $item->harga }}</td>
-                    <td class="px-2 py-2">{{ $item->tipe_pembayaran }}</td>
+                <tr class="border-t dark:border-gray-700">
+                    <td class="px-2 py-2 text-gray-900 dark:text-gray-100">{{ $loop->iteration}}</td>
+                    <td class="px-2 py-2 text-gray-900 dark:text-gray-100">{{ $item->nama }}</td>
+                    <td class="px-2 py-2 text-gray-900 dark:text-gray-100">{{ $item->harga }}</td>
+                    <td class="px-2 py-2 text-gray-900 dark:text-gray-100">{{ $item->tipe_pembayaran }}</td>
                     <td class="px-2 py-2 relative" x-data="{ open: false }">
-                        <button @click="open = !open" class="text-gray-600 hover:text-black focus:outline-none">
-                            &#8942; <!-- Tiga titik vertikal -->
+                        <button @click="open = !open" class="text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white focus:outline-none">
+                            &#8942;
                         </button>
-
-                        <div x-show="open" @click.away="open = false" class="absolute right-0 z-10 mt-2 w-36 bg-white border rounded shadow-md">
-                            <a href="{{ route('jenis-pembayaran.show', ['id' => $item->id]) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Detail</a>
-                            <a href="{{ route('jenis-pembayaran.edit', $item->id) }}" class="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100">Edit</a>
+                        <div x-show="open" @click.away="open = false" class="absolute right-0 z-10 mt-2 w-36 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-md">
+                            <a href="{{ route('jenis-pembayaran.show', ['id' => $item->id]) }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Detail</a>
+                            <a href="{{ route('jenis-pembayaran.edit', $item->id) }}" class="block px-4 py-2 text-sm text-blue-600 dark:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700">Edit</a>
                             <form action="{{ route('jenis-pembayaran.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Hapus</button>
+                                <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">Hapus</button>
                             </form>
                         </div>
                     </td>
@@ -79,7 +76,5 @@
                 @endforeach
             </tbody>
         </table>
-
-
     </div>
 </x-app-layout>

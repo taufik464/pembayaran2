@@ -30,11 +30,14 @@ class PTambahan extends Model
 
     public function siswa()
     {
-        return $this->belongsTo(Siswa::class, 'siswa_id', 'nis');
+        return $this->belongsTo(Siswa::class, 'siswa_id' );
     }
 
     public function transaksi()
     {
         return $this->belongsTo(Transaksi::class, 'transaksi_id');
     }
+    
+
+   
 }

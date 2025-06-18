@@ -12,7 +12,7 @@ class CetakStrukController extends Controller
     {
 
         // Mengambil data siswa melalui relasi 'pBulanan', 'aTahunan', atau 'pTambahan'
-        $transaksi = Transaksi::with(['pBulanan.siswa', 'aTahunan.pTahunan.siswa', 'pTambahan.siswa'])->findOrFail($id);
+        $transaksi = Transaksi::with(['pBulanan.siswa', 'aTahunan.pTahunan.siswa', 'pTambahan.siswa','metodeBayar'])->findOrFail($id);
         $siswa = null;
 
         if ($transaksi->pBulanan->isNotEmpty()) {
@@ -32,7 +32,7 @@ class CetakStrukController extends Controller
 
         // Rincian dari pBulanan
         $groupedBulanan = $transaksi->pBulanan->groupBy(function ($item) {
-            return optional($item->jenisPembayaran)->nama;
+            return optional($item->jenisPembayaran)->nama; 
         });
 
         foreach ($groupedBulanan as $jenis => $items) {
@@ -76,7 +76,7 @@ class CetakStrukController extends Controller
         //menghitung kembalian
         $kembalian = $transaksi->uang_bayar - $totalPembayaran;
 
-        $transaksi = Transaksi::with(['pBulanan', 'aTahunan', 'pTambahan'])->findOrFail($id);
+       
         return view('transaksi.struk.struk', compact('transaksi', 'siswa', 'rincian', 'totalPembayaran', 'kembalian'));
     }
 }

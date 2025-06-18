@@ -14,11 +14,13 @@ use App\Http\Controllers\aturPembayaran\settingPtambahanController;
 use App\Http\Controllers\transaksi\CetakStrukController;
 use App\Http\Controllers\transaksi\transaksiController;
 use App\Http\Controllers\laporan\rekapController;
+use App\Http\Controllers\laporan\riwayatTransaksiConteroller;
+use App\Http\Controllers\aturPembayaran\metodeController;
 
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome2');
 });
 
 Route::get('/dashboard', function () {
@@ -81,7 +83,11 @@ Route::middleware('auth')->group(function () {
     Route::get('jenis-pembayaran/show/{id}', [JenisPembayaranController::class, 'show'])->name('jenis-pembayaran.show');
 
 
-
+    //Metode Bayar
+    Route::get('metode', [metodeController::class, 'index'])->name('metode.index');
+    Route::post('metode/store', [metodeController::class, 'store'])->name('metode.store');
+    Route::put('metode/update/{id}', [metodeController::class, 'update'])->name('metode.update');
+    Route::delete('metode/destroy/{id}', [metodeController::class, 'destroy'])->name('metode.destroy');
 
 
     Route::get('jenis-pembayaran/{id}/setting-tarif', [JenisPembayaranController::class, 'redirectSettingTarif'])->name('jenis-pembayaran.setting-tarif');
@@ -110,6 +116,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/kelola-pembayaran', [transaksiController::class, 'index'])->name('kelola-pembayaran.index');
     Route::post('/kelola-pembayaran', [transaksiController::class, 'SimpanTransaksi'])->name('kelola-pembayaran.simpan');
+
+    Route::get('/riwayat-transaksi', [riwayatTransaksiConteroller::class, 'index'])->name('riwayat.index');
 
     Route::get('/struk/cetak/{id}', [CetakStrukController::class, 'cetakStruk'])->name('cetak-struk');
     Route::get('/struk/unduh/{id}', [CetakStrukController::class, 'unduhStruk'])->name('unduh-struk');

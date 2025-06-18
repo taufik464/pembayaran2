@@ -16,7 +16,7 @@
             <form action="{{ route('kelola-pembayaran.simpan') }}" id="formBayar" method="POST" action="">
                 @csrf
                 <div class="border-t p-4">
-                   
+
                     <input type="hidden" name="dataPembayaran" id="dataPembayaranInput">
                     <div class="flex justify-between font-bold text-lg">
                         <span>Total Pembayaran:</span>
@@ -45,7 +45,7 @@
                     </div>
 
                     <div class="flex justify-between mt-6">
-                        <button data-modal-hide="biayaTambahanModal"
+                        <button type="button" data-modal-toggle="paymentModal"
                             class="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded">
                             Batal
                         </button>
@@ -61,49 +61,50 @@
             </form>
         </div>
     </div>
+</div>
 
-    <script>
-        document.getElementById("formBayar").addEventListener("submit", function(e) {
-            const input = document.getElementById("dataPembayaranInput");
-            input.value = JSON.stringify(daftarPembayaran);
+<script>
+    document.getElementById("formBayar").addEventListener("submit", function(e) {
+        const input = document.getElementById("dataPembayaranInput");
+        input.value = JSON.stringify(daftarPembayaran);
 
-            // Validasi metode bayar
-            const metode = document.getElementById('metode_bayar').value;
-            if (!metode) {
-                isValid = false;
-                document.getElementById('metodeBayarMsg').classList.remove('hidden');
-            } else {
-                document.getElementById('metodeBayarMsg').classList.add('hidden');
-            }
+        // Validasi metode bayar
+        const metode = document.getElementById('metode_bayar').value;
+        if (!metode) {
+            isValid = false;
+            document.getElementById('metodeBayarMsg').classList.remove('hidden');
+        } else {
+            document.getElementById('metodeBayarMsg').classList.add('hidden');
+        }
 
-            // Validasi apakah uang cukup
-            const jumlahUang = parseFloat(document.getElementById('jumlah_uang').value) || 0;
-            const total = daftarPembayaran.reduce((sum, item) => sum + item.harga, 0);
-            if (jumlahUang < total) {
-                e.preventDefault(); // hentikan submit
-                document.getElementById('uangKurangMsg').classList.remove('hidden');
-            } else {
-                document.getElementById('uangKurangMsg').classList.add('hidden');
-            }
-        });
+        // Validasi apakah uang cukup
+        const jumlahUang = parseFloat(document.getElementById('jumlah_uang').value) || 0;
+        const total = daftarPembayaran.reduce((sum, item) => sum + item.harga, 0);
+        if (jumlahUang < total) {
+            e.preventDefault(); // hentikan submit
+            document.getElementById('uangKurangMsg').classList.remove('hidden');
+        } else {
+            document.getElementById('uangKurangMsg').classList.add('hidden');
+        }
+    });
 
-        const jumlahUangInput = document.getElementById('jumlah_uang');
-        const kembalianSpan = document.getElementById('kembalianSpan');
-        const uangKurangMsg = document.getElementById('uangKurangMsg');
+    const jumlahUangInput = document.getElementById('jumlah_uang');
+    const kembalianSpan = document.getElementById('kembalianSpan');
+    const uangKurangMsg = document.getElementById('uangKurangMsg');
 
-        jumlahUangInput.addEventListener('input', () => {
-            const jumlahUang = parseFloat(jumlahUangInput.value) || 0;
-            const total = daftarPembayaran.reduce((sum, item) => sum + item.harga, 0);
-            const kembalian = jumlahUang - total;
+    jumlahUangInput.addEventListener('input', () => {
+        const jumlahUang = parseFloat(jumlahUangInput.value) || 0;
+        const total = daftarPembayaran.reduce((sum, item) => sum + item.harga, 0);
+        const kembalian = jumlahUang - total;
 
-            // Update tampilan kembalian meskipun negatif
-            kembalianSpan.innerText = 'Rp' + kembalian.toLocaleString();
+        // Update tampilan kembalian meskipun negatif
+        kembalianSpan.innerText = 'Rp' + kembalian.toLocaleString();
 
-            // Tampilkan atau sembunyikan pesan uang kurang
-            if (kembalian < 0) {
-                uangKurangMsg.classList.remove('hidden');
-            } else {
-                uangKurangMsg.classList.add('hidden');
-            }
-        });
-    </script>
+        // Tampilkan atau sembunyikan pesan uang kurang
+        if (kembalian < 0) {
+            uangKurangMsg.classList.remove('hidden');
+        } else {
+            uangKurangMsg.classList.add('hidden');
+        }
+    });
+</script>

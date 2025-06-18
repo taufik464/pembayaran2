@@ -1,9 +1,9 @@
 <div id="bulanan" role="tabpanel" class="hidden">
     <h3 class="font-semibold mb-2">Pembayaran Bulanan</h3>
     <table class="w-full text-sm border">
-        <thead>
+        <thead class="">
             <tr class="bg-gray-200">
-                <th class="px-4 py-2">No</th>
+                <th class="px-4 py-2 ">No</th>
                 <th class="px-4 py-2">Nama</th>
                 <th class="px-4 py-2">Tahun</th>
                 <th class="px-4 py-2">Nominal</th>
@@ -40,6 +40,7 @@
             <tr class="bg-gray-200">
                 <th class="px-4 py-2">No</th>
                 <th class="px-4 py-2">Nama</th>
+                <th class="px-4 py-2">Tahun</th>
                 <th class="px-4 py-2">Nominal</th>
                 <th class="px-4 py-2">Dibayar</th>
                 <th class="px-4 py-2">Status</th>
@@ -52,6 +53,7 @@
 
                 <td class="px-4 py-2">{{ $loop->iteration }}</td>
                 <td class="px-4 py-2">{{ $item->jenisPembayaran->nama }}</td>
+                <td class="px-4 py-2">{{ $item->tahun->tahun }}</td>
                 <td class="px-4 py-2">Rp{{ number_format($item->harga, 0, ',', '.') }}</td>
                 <td class="px-4 py-2">Rp{{ number_format($item->dibayar, 0, ',', '.') }}</td>
                 <td class="px-4 py-2">{{ $item->status }}</td>

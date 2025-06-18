@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class PBulanan extends Model
 {
     protected $table = 'p_bulanans';
-    protected $appends = ['status', 'nama_bulan'];
+    protected $appends = ['status', 'nama_bulan', 'total_bayar'];
 
     protected $fillable = [
         'jenis_pembayaran_id',
@@ -22,6 +22,14 @@ class PBulanan extends Model
     public function getStatusAttribute()
     {
         return $this->transaksi_id === null ? 'Belum Lunas' : 'Lunas';
+    }
+
+    public function getTotalBayarAttribute()
+    {
+        return self::where('transaksi_id', '!=', null)
+            ->where('tahun_id', $this->tahun_id)
+            ->where('siswa_id', $this->siswa_id)
+            ->sum('harga');
     }
 
     public function getNamaBulanAttribute()
@@ -53,7 +61,7 @@ class PBulanan extends Model
 
     public function siswa()
     {
-        return $this->belongsTo(Siswa::class, 'siswa_id', 'nis');
+        return $this->belongsTo(Siswa::class, 'siswa_id');
     }
     
     public function transaksi()

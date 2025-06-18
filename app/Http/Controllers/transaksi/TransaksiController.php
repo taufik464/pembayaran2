@@ -33,19 +33,19 @@ class TransaksiController extends Controller
             if ($siswa) {
                 // Ambil semua data pembayaran yang berelasi dengan siswa ini
                 $bulanan = PBulanan::with('jenisPembayaran')
-                    ->where('siswa_id', $siswa->nis)
+                    ->where('siswa_id', $siswa->id)
                     ->whereNull('transaksi_id')
                     ->get();
 
                 $listtahunan = PTahunan::with('jenisPembayaran')
-                    ->where('siswa_id', $siswa->nis)
+                    ->where('siswa_id', $siswa->id)
                     ->get();
                 $tahunan = $listtahunan->filter(function ($item) {
                     return $item->status != 'Lunas';
                 });
 
                 $tambahan = PTambahan::with('jenisPembayaran')
-                    ->where('siswa_id', $siswa->nis)
+                    ->where('siswa_id', $siswa->id)
                     ->whereNull('transaksi_id')
                     ->get();
 

@@ -109,7 +109,7 @@ class SettingBulananController extends Controller
                 $nominal = $nominalList[$index] ?? 0;
                 if ($nominal <= 0) continue;
 
-                $existing = PBulanan::where('siswa_id', $siswa->nis)
+                $existing = PBulanan::where('siswa_id', $siswa->id)
                     ->where('jenis_pembayaran_id', $request->jenis_pembayaran)
                     ->where('tahun_id', $request->tahun)
                     ->where('bulan', $bulan)
@@ -121,7 +121,7 @@ class SettingBulananController extends Controller
                 }
 
                 PBulanan::create([
-                    'siswa_id' => $siswa->nis,
+                    'siswa_id' => $siswa->id,
                     'jenis_pembayaran_id' => $request->jenis_pembayaran,
                     'tahun_id' => $request->tahun,
                     'bulan' => $bulan,
@@ -154,7 +154,7 @@ class SettingBulananController extends Controller
         return $query->get();
     }
 
-    public function show($nis)
+   /* public function show($nis)
     {
 
         // Cari semua pembayaran bulanan untuk siswa dengan nis tertentu
@@ -171,7 +171,7 @@ class SettingBulananController extends Controller
         return view('atur_pembayaran.p_bulanan.tabel', compact('bulanan', 'nis'));
     }
 
-    public function edit($id)
+    /*public function edit($id)
     {
         $settingBulanan = PBulanan::findOrFail($id);
         $pembayaran = JenisPembayaran::with('periode')->findOrFail($settingBulanan->jenis_pembayaran_id);
@@ -192,8 +192,8 @@ class SettingBulananController extends Controller
         $kelas = Kelas::all();
 
         return view('atur_pembayaransetting_pembayaran.edit_S_Bulanan', compact('settingBulanan', 'pembayaran', 'kelas', 'bulan'));
-    }
-    public function update(Request $request, $id)
+    }*/
+    /*public function update(Request $request, $id)
     {
         // Validasi input request
         $request->validate([
@@ -261,8 +261,8 @@ class SettingBulananController extends Controller
         }
         return redirect()->route('jenis-pembayaran.index')
             ->with('success', 'Data setting bulanan berhasil diubah.');
-    }
-    public function destroy($nis, $id)
+    }*/
+    /*public function destroy($nis, $id)
     {
         $bulanan = PBulanan::findOrFail($id);
 
@@ -276,5 +276,5 @@ class SettingBulananController extends Controller
 
         return redirect()->route('setting-bulanan.show', ['nis' => $nis])
             ->with('success', 'Data setting bulanan berhasil dihapus.');
-    }
+    }*/
 }

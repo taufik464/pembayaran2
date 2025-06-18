@@ -31,10 +31,10 @@
 
 
 
-    <div class="bg-white rounded-lg text-gray-900 dark:text-gray-100">
+    <div class="bg-white rounded-lg text-gray-900 dark:text-gray-100 dark:bg-gray-800">
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-4 ">
             <div class="flex items-center justify-between">
-                <div class="pb-4 bg-white dark:bg-gray-900">
+                <div class="pb-4 bg-white dark:bg-gray-800">
                     <label for="tabl</div>e-search" class="sr-only">Search</label>
                     <div class="relative mt-1">
                         <div class="absolute inset-y-0 rtl:inset-r-</div>0 start-0 flex items-center ps-3 pointer-events-none">

@@ -29,10 +29,10 @@
 
 
 
-    <div class=" text-gray-900 dark:text-gray-100 ">
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-4 bg-white">
+    <div class=" text-gray-900 dark:text-gray-100 rounded-lg dark:bg-gray-800">
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-4 bg-white dark:bg-gray-800">
             <div class="flex items-center justify-between">
-                <div class="pb-4 bg-white dark:bg-gray-900">
+                <div class="pb-4 bg-white dark:bg-gray-800">
                     <label for="table-search" class="sr-only">Search</label>
                     <div class="relative mt-1">
                         <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -51,17 +51,17 @@
             <table class="w-full mt-2 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6 py-3 font-medium dark:text-white">
                             No
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6 py-3 font-medium dark:text-white">
                             tahun
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-6 py-3 font-medium dark:text-white">
                             status
                         </th>
-                        <th scope="col" class="px-6 py-3">
-                            Action
+                        <th scope="col" class="px-6 py-3 font-medium dark:text-white">
+
                         </th>
                     </tr>
                 </thead>
@@ -71,10 +71,10 @@
                         <th scope="NIS" class="px-6 py-3 font-xs text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $loop->iteration }}
                         </th>
-                        <td class="px-6 py-3">
+                        <td class="px-6 py-3font-medium dark:text-white">
                             {{ $tahunajaran->tahun}}
                         </td>
-                        <td class="px-6 py-3">
+                        <td class="px-6 py-3 font-medium dark:text-white">
                             {{ $tahunajaran->status }}
                         </td>
 

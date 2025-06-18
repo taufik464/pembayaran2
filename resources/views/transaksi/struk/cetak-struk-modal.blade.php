@@ -74,12 +74,7 @@
             location.reload(); // reload agar state kembali normal
         });
 
-        // Tutup modal klik di luar modal konten
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeModal();
-            }
-        });
+        
     });
 </script>
 @endif
