@@ -3,17 +3,12 @@
 namespace App\Http\Controllers\aturPembayaran;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
-
 use App\Models\Kelas;
 use App\Models\PBulanan;
 use App\Models\JenisPembayaran;
 use App\Models\periode;
 use App\Models\Siswa;
-
-
-
-
-
+use App\Models\SiswaBulanan;
 use Illuminate\Http\Request;
 
 class SettingBulananController extends Controller
@@ -71,61 +66,48 @@ class SettingBulananController extends Controller
             'nis' => 'nullable|string', // NIS bisa diisi atau tidak
         ]);
 
-        $pilihan = $request->kelas_or_angkatan;
-
-        $kelasIds = [];
-
-        if ($pilihan === 'all') {
-            $kelasIds = Kelas::pluck('id')->toArray();
-        } elseif (Str::startsWith($pilihan, 'angkatan_')) {
-            $angkatan = Str::replaceFirst('angkatan_', '', $pilihan);
-            $kelasIds = Kelas::where('tingkatan', $angkatan)->pluck('id')->toArray();
-        } elseif (Str::startsWith($pilihan, 'kelas_')) {
-            $kelasId = Str::replaceFirst('kelas_', '', $pilihan);
-            $kelasIds[] = $kelasId;
-        }
-
-        
+        $kelasIds = $this->getKelasIds($request->kelas_or_angkatan);
         $siswaList = $this->getSiswaList($kelasIds, $request->nis);
 
-
-        if (!$siswaList || $siswaList->isEmpty()) {
+        if ($siswaList->isEmpty()) {
             return back()->withErrors(['Tidak ada siswa ditemukan untuk pilihan tersebut.']);
         }
 
-        $bulanList = $request->bulan;
-        $nominalList = $request->nominal;
-
-        if (count($bulanList) !== count($nominalList)) {
-            return back()->withErrors(['Data bulan dan nominal tidak sesuai.']);
-        }
-
-        $duplikat = []; // tampung data yang duplikat
+        $duplikat = [];
 
         foreach ($siswaList as $siswa) {
-            if (!$siswa->nis) continue;
+            foreach ($request->bulan as $index => $bulan) {
+                $nominal = $request->nominal[$index] ?? 0;
 
-            foreach ($bulanList as $index => $bulan) {
-                $nominal = $nominalList[$index] ?? 0;
                 if ($nominal <= 0) continue;
 
-                $existing = PBulanan::where('siswa_id', $siswa->id)
-                    ->where('jenis_pembayaran_id', $request->jenis_pembayaran)
-                    ->where('tahun_id', $request->tahun)
-                    ->where('bulan', $bulan)
-                    ->first();
+                // Cek apakah sudah ada relasi yang sama
+                $existing = SiswaBulanan::where('siswa_id', $siswa->nis)
+                    ->whereHas('bulanan', function ($q) use ($request, $bulan) {
+                        $q->where('jenis_pembayaran_id', $request->jenis_pembayaran)
+                            ->where('tahun_id', $request->tahun)
+                            ->where('bulan', $bulan);
+                    })
+                    ->exists();
 
                 if ($existing) {
                     $duplikat[] = "NIS {$siswa->nis} untuk bulan {$bulan}";
                     continue;
                 }
 
-                PBulanan::create([
-                    'siswa_id' => $siswa->id,
+                // Buat atau dapatkan record PBulanan
+                $bulanan = PBulanan::firstOrCreate([
                     'jenis_pembayaran_id' => $request->jenis_pembayaran,
                     'tahun_id' => $request->tahun,
                     'bulan' => $bulan,
                     'harga' => $nominal,
+                ]);
+
+                // Buat record pivot
+                SiswaBulanan::create([
+                    'siswa_id' => $siswa->id,
+                    'bulanan_id' => $bulanan->id,
+                    // 'transaksi_id' bisa null jika belum dibayar
                 ]);
             }
         }
@@ -154,7 +136,22 @@ class SettingBulananController extends Controller
         return $query->get();
     }
 
-   /* public function show($nis)
+    private function getKelasIds($pilihan)
+    {
+        if ($pilihan === 'all') {
+            return Kelas::pluck('id')->toArray();
+        } elseif (Str::startsWith($pilihan, 'angkatan_')) {
+            $angkatan = Str::replaceFirst('angkatan_', '', $pilihan);
+            return Kelas::where('tingkatan', $angkatan)->pluck('id')->toArray();
+        } elseif (Str::startsWith($pilihan, 'kelas_')) {
+            return [Str::replaceFirst('kelas_', '', $pilihan)];
+        }
+
+        return [];
+    }
+
+
+    /* public function show($nis)
     {
 
         // Cari semua pembayaran bulanan untuk siswa dengan nis tertentu

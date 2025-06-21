@@ -14,7 +14,7 @@
         <tbody>
             @forelse ($bulanan as $item)
             <tr class="border-b cursor-pointer hover:bg-blue-100"
-                onclick="tambahPembayaran( '{{$item->id }}', '{{ $item->jenisPembayaran->nama }} - {{ $item->nama_bulan }}', '{{ $item->harga }}', 'bulanan')">
+                onclick="tambahPembayaran( '{{$item->id }}', '{{ $item->jenisPembayaran->nama }} - {{ $item->nama_bulan }}', '{{ $item->harga }}', 'bulanan', '{{ $siswa->id }}')">
                 <td class="px-4 py-2">{{ $loop->iteration }}</td>
                 <td class="px-4 py-2">{{ $item->jenisPembayaran->nama }} - {{ $item->nama_bulan }}</td>
                 <td class="px-4 py-2">{{ $item->tahun->tahun }}</td>
@@ -49,11 +49,12 @@
         </thead>
         <tbody>
             @forelse ($tahunan as $item)
-            <tr class="border-b cursor-pointer hover:bg-blue-100" onclick="tambahPembayaran( '{{$item->id }}', '{{ $item->jenisPembayaran->nama }}', '{{ $item->harga - $item->dibayar }}', 'tahunan' )">
+                        <tr class="border-b cursor-pointer hover:bg-blue-100" onclick="tambahPembayaran( '{{ $item->id }}', '{{ $item->nama }}', '{{ $item->harga - $item->dibayar }}', 'tahunan', '{{ $siswa->id }}' )">
+
 
                 <td class="px-4 py-2">{{ $loop->iteration }}</td>
-                <td class="px-4 py-2">{{ $item->jenisPembayaran->nama }}</td>
-                <td class="px-4 py-2">{{ $item->tahun->tahun }}</td>
+                <td class="px-4 py-2">{{ $item->nama }}</td>
+                <td class="px-4 py-2">{{ $item->tahun}}</td>
                 <td class="px-4 py-2">Rp{{ number_format($item->harga, 0, ',', '.') }}</td>
                 <td class="px-4 py-2">Rp{{ number_format($item->dibayar, 0, ',', '.') }}</td>
                 <td class="px-4 py-2">{{ $item->status }}</td>
@@ -94,7 +95,7 @@
         <tbody>
             @forelse ($tambahan as $item)
             <tr class="border-b cursor-pointer hover:bg-blue-100"
-                onclick="tambahPembayaran( '{{$item->id }}', '{{ $item->jenisPembayaran->nama ?? '-' }}', '{{ $item->harga }}', 'tambahan' )">
+                onclick="tambahPembayaran( '{{$item->id }}', '{{ $item->jenisPembayaran->nama ?? '-' }}', '{{ $item->harga }}', 'tambahan', '{{ $siswa->id }}' )">
                 <td class="px-4 py-2">{{ $loop->iteration }}</td>
                 <td class="px-4 py-2">{{ $item->jenisPembayaran->nama ?? '-'}}</td>
                 <td class="px-4 py-2">Rp{{ number_format($item->harga, 0, ',', '.') }}</td>

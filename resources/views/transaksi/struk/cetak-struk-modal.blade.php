@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div id="strukModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full inset-0 h-modal h-full">
-    <div class="relative p-4 w-full max-w-3xl h-full md:h-auto mx-auto">
+    <div class="relative p-4  w-auto h-full md:h-auto mx-auto">
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
             <!-- Modal header -->
@@ -16,7 +16,7 @@
                 </button>
             </div>
             <!-- Modal body -->
-            <div class="p-6 space-y-6" id="strukModalBody">
+            <div class="p-2 space-y-2" id="strukModalBody">
                 <!-- Struk dimuat via AJAX -->
             </div>
             <!-- Modal footer (optional) -->
@@ -66,15 +66,44 @@
         // Cetak isi modal
         printBtn.addEventListener('click', () => {
             const printContents = modalBody.innerHTML;
-            const originalContents = document.body.innerHTML;
 
-            document.body.innerHTML = printContents;
-            window.print();
-            document.body.innerHTML = originalContents;
-            location.reload(); // reload agar state kembali normal
+            // Buat iframe tersembunyi
+            const printFrame = document.createElement('iframe');
+            printFrame.style.position = 'absolute';
+            printFrame.style.left = '-9999px';
+            document.body.appendChild(printFrame);
+
+            const doc = printFrame.contentWindow.document;
+
+            // Tulis ulang isi dokumen ke iframe
+            doc.open();
+            doc.write(`
+        <html>
+        <head>
+            <title>Cetak Struk</title>
+            <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+           <style>
+                @page { size: 80mm auto; margin: 0; }
+            </style>
+        </head>
+        <body>${printContents}</body>
+        </html>
+    `);
+            doc.close();
+
+            // Tunggu konten termuat sebelum print
+            printFrame.onload = function() {
+                printFrame.contentWindow.focus();
+                printFrame.contentWindow.print();
+
+                // Hapus iframe setelah cetak
+                setTimeout(() => {
+                    document.body.removeChild(printFrame);
+                }, 1000);
+            };
         });
 
-        
+
     });
 </script>
 @endif

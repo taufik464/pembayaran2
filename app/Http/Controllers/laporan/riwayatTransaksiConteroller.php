@@ -3,69 +3,119 @@
 namespace App\Http\Controllers\laporan;
 
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
 use App\Models\Transaksi;
-use Illuminate\Support\Facades\Log;
-
+use App\Models\Siswa;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class riwayatTransaksiConteroller extends Controller
 {
-    public function index(){
-        // Ambil semua transaksi beserta relasi yang diperlukan
-        $transaksi = Transaksi::with(['pBulanan.siswa', 'aTahunan.pTahunan.siswa', 'pTambahan.siswa'])->get();
-       
+    public function index()
+    {
+        // Ambil transaksi dengan relasi yang diperlukan
+        $transaksis = Transaksi::with([
+            'siswaBulanan.siswa',
+            'siswaBulanan.bulanan.jenisPembayaran',
+            'aTahunan.pTahunan.siswa',
+            'aTahunan.pTahunan.jenisPembayaran',
+            'pTambahan.siswa',
+            'pTambahan.jenisPembayaran',
+            'metodeBayar',
+            'user.staff'
+        ])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         $riwayat = [];
 
-        foreach ($transaksi as $trx) {
+        foreach ($transaksis as $transaksi) {
+            $detailPembayaran = [];
             $namaSiswa = null;
             $totalPembayaran = 0;
 
-          
+            // Handle Pembayaran Bulanan (many-to-many)
+            if (isset($transaksi->siswaBulanan) && is_iterable($transaksi->siswaBulanan)) {
+                foreach ($transaksi->siswaBulanan as $siswaBulanan) {
+                    if (isset($siswaBulanan->bulanan) && isset($siswaBulanan->siswa)) {
+                        $totalPembayaran += $siswaBulanan->bulanan->harga ?? 0;
+                        $detailPembayaran[] = [
+                            'jenis' => 'Bulanan',
+                            'nama' => optional($siswaBulanan->bulanan->jenisPembayaran)->nama ?? 'Jenis Pembayaran Tidak Diketahui',
+                            'jumlah' => $siswaBulanan->bulanan->harga ?? 0,
+                            'siswa_id' => $siswaBulanan->siswa->id ?? null,
+                            'siswa_nama' => $siswaBulanan->siswa->nama ?? 'Siswa Tidak Diketahui'
+                        ];
+
+                        if (!$namaSiswa && isset($siswaBulanan->siswa->nama)) {
+                            $namaSiswa = $siswaBulanan->siswa->nama;
+                        }
+                    }
+                }
+            }
 
 
-            // Cek dan ambil nama siswa dari relasi yang tersedia
-            if ($trx->pBulanan && $trx->pBulanan->isNotEmpty()) {
-            $siswa = $trx->pBulanan->first()->siswa;
-            $namaSiswa = optional($siswa)->nama;
-            $totalPembayaran += $trx->pBulanan->sum('harga');
-            }
-            
+            // Handle Pembayaran Tahunan
+            if ($transaksi->aTahunan && $transaksi->aTahunan->isNotEmpty()) {
+                foreach ($transaksi->aTahunan as $tahunan) {
+                    // Dapatkan siswa melalui tabel pivot
+                    $siswaIds = DB::table('siswa_p_tahunan')
+                        ->where('tahunan_id', $tahunan->pTahunan->id)
+                        ->pluck('siswa_id');
 
-            if ($trx->aTahunan && $trx->aTahunan->isNotEmpty()) {
-            $aTahunan = $trx->aTahunan->first();
-            $siswa = optional($aTahunan->pTahunan)->siswa;
-            if (!$namaSiswa) {
-                $namaSiswa = optional($siswa)->nama;
-            }
-            $totalPembayaran += $trx->aTahunan->sum('nominal');
-            }
+                    // Ambil data siswa pertama (atau sesuaikan dengan kebutuhan)
+                    $siswa = Siswa::find($siswaIds->first());
 
-            if ($trx->pTambahan && $trx->pTambahan->isNotEmpty()) {
-            $siswa = $trx->pTambahan->first()->siswa;
-            if (!$namaSiswa) {
-                $namaSiswa = optional($siswa)->nama;
+                    if ($siswa) {
+                        if (!$namaSiswa) {
+                            $namaSiswa = $siswa->nama;
+                        }
+                        
+                    $totalPembayaran += $tahunan->nominal;
+                    $detailPembayaran[] = [
+                        'jenis' => 'Tahunan',
+                        'nama' => $tahunan->pTahunan->jenisPembayaran->nama ?? '-',
+                        'jumlah' => $tahunan->nominal,
+                        'siswa_id' => optional($siswa)->id
+                    ];
+                }
             }
-            $totalPembayaran += $trx->pTambahan->sum('harga');
-            }
-            
+        }
+           
 
-            // Tambahkan data transaksi lain yang diinginkan, misal: tanggal, keterangan, metode pembayaran, dll
+            // Handle Pembayaran Tambahan
+            if ($transaksi->pTambahan->isNotEmpty()) {
+                foreach ($transaksi->pTambahan as $tambahan) {
+                    $siswa = $tambahan->siswa;
+
+                    if (!$namaSiswa) {
+                        $namaSiswa = optional($siswa)->nama;
+                    }
+
+                    $totalPembayaran += $tambahan->harga;
+                    $detailPembayaran[] = [
+                        'jenis' => 'Tambahan',
+                        'nama' => $tambahan->jenisPembayaran->nama,
+                        'jumlah' => $tambahan->harga,
+                        'siswa_id' => optional($siswa)->id
+                    ];
+                }
+            }
+        
+
             $riwayat[] = [
-            'tanggal' => $trx->created_at,
-            'transaksi' => $trx,
-            'nama_siswa' => $namaSiswa,
-            'total_pembayaran' => $totalPembayaran,
-            'metode_pembayaran' => $trx->metodeBayar->nama,
-            'Jumlah_uang' => $trx->uang_bayar,
-            'Staff' => $trx->user->staff->nama ?? 'master',
-            
+                'id' => $transaksi->id,
+                'tanggal' => $transaksi->created_at->format('d/m/Y H:i'),
+                'nama_siswa' => $namaSiswa ?? 'Tidak diketahui',
+                'total_pembayaran' => $totalPembayaran,
+                'metode_pembayaran' => optional($transaksi->metodeBayar)->nama ?? '-',
+                'jumlah_uang' => $transaksi->uang_bayar,
+                'kembalian' => $transaksi->uang_kembali,
+                'staff' => optional($transaksi->user->staff)->nama ?? 'Admin',
+                'detail_pembayaran' => $detailPembayaran,
+                'transaksi_id' => $transaksi->id
             ];
         }
-     
-
+    
         return view('laporan.riwayat.index', compact('riwayat'));
-
-
     }
 }

@@ -11,6 +11,7 @@ class PTambahan extends Model
     protected $fillable = [
         'jenis_pembayaran_id',
         'siswa_id',
+        'periode_id',
         'transaksi_id',
         'harga',
     ];
@@ -38,6 +39,9 @@ class PTambahan extends Model
         return $this->belongsTo(Transaksi::class, 'transaksi_id');
     }
     
-
+    public function periode()
+    {
+        return $this->belongsTo(Periode::class, 'periode_id');
+    }
    
 }

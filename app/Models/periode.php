@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 class periode extends Model
 {
+    use HasFactory;
     protected $table = 'periodes';
     protected $appends = ['tahun'];
 
@@ -32,4 +35,6 @@ class periode extends Model
     public function Tambahan() {
         return $this->hasMany(PTambahan::class);
     }
+
+    
 }

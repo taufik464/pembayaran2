@@ -8,6 +8,7 @@ class ATahunan extends Model
 {
     protected $table = 'a_tahunans';
     protected $fillable = [
+        'siswa_id',
         'tahunan_id',
         'transaksi_id',
         'nominal',

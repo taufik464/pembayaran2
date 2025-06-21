@@ -10,16 +10,19 @@ class CetakStrukController extends Controller
 {
     public function cetakStruk($id)
     {
-
+       
         // Mengambil data siswa melalui relasi 'pBulanan', 'aTahunan', atau 'pTambahan'
-        $transaksi = Transaksi::with(['pBulanan.siswa', 'aTahunan.pTahunan.siswa', 'pTambahan.siswa','metodeBayar'])->findOrFail($id);
+        $transaksi = Transaksi::with(['pBulanan', 'aTahunan.pTahunan', 'pTambahan.siswa','metodeBayar'])->findOrFail($id);
+   
         $siswa = null;
-
+        // Cek isi transaksi untuk debugging
         if ($transaksi->pBulanan->isNotEmpty()) {
-            $siswa = $transaksi->pBulanan->first()->siswa;
+            $firstsiswa = $transaksi->pBulanan->first();
+            $siswa = $firstsiswa->siswa->first();
         } elseif ($transaksi->aTahunan->isNotEmpty()) {
-            $aTahunan = $transaksi->aTahunan->first(); // ambil satu item
-            $siswa = optional($aTahunan->pTahunan)->siswa;
+            $aTahunan = $transaksi->aTahunan->first();
+            $pTahunan = optional($aTahunan)->pTahunan;
+            $siswa = optional($pTahunan?->siswa)->first();
         } elseif ($transaksi->pTambahan->isNotEmpty()) {
             $siswa = $transaksi->pTambahan->first()->siswa;
         }
@@ -32,7 +35,7 @@ class CetakStrukController extends Controller
 
         // Rincian dari pBulanan
         $groupedBulanan = $transaksi->pBulanan->groupBy(function ($item) {
-            return optional($item->jenisPembayaran)->nama; 
+            return optional($item->jenisPembayaran)->nama;
         });
 
         foreach ($groupedBulanan as $jenis => $items) {

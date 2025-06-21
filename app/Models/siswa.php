@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class siswa extends Model
 {
+    use HasFactory;
     protected $table = 'siswa';
    
     public $incrementing = false;  
@@ -32,16 +35,37 @@ class siswa extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function pBulanan()
+    public function pembayaranBulanan(): BelongsToMany
     {
-        return $this->hasMany(PBulanan::class, 'siswa_id', 'nis');
+        return $this->belongsToMany(pBulanan::class, 'siswa_bulanan', 'siswa_id', 'bulanan_id')
+            ->using(SiswaBulanan::class)
+            ->withPivot('transaksi_id')
+            ->withTimestamps();
+    }
+
+
+    public function transaksi()
+    {
+        return $this->hasManyThrough(
+            Transaksi::class,
+            SiswaBulanan::class,
+            'siswa_id', // Foreign key on siswa_bulanan table
+            'id', // Foreign key on transaksi table
+            'id', // Local key on siswa table
+            'transaksi_id' // Local key on siswa_bulanan table
+        );
     }
     public function pTahunan()
     {
-        return $this->hasMany(PTahunan::class, 'siswa_id', 'nis');
+        return $this->belongsToMany(PTahunan::class, 'siswa_p_tahunan', 'siswa_id', 'tahunan_id');
+           
     }
     public function pTambahan()
     {
-        return $this->hasMany(PTambahan::class, 'siswa_id', 'nis');
+        return $this->hasMany(PTambahan::class, 'siswa_id', 'id');
+    }
+    public function aTahunan()
+    {
+        return $this->hasMany(ATahunan::class, 'siswa_id');
     }
 }

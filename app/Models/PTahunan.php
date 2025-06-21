@@ -10,25 +10,13 @@ use Illuminate\Support\Facades\Schema;
 class PTahunan extends Model
 {
     protected $table = 'p_tahunans';
-    protected $appends = ['status', 'dibayar'];
+   
     protected $fillable = [
         'jenis_pembayaran_id',
         'tahun_id',
-        'siswa_id',
         'harga',
     ];
-
-    public function getStatusAttribute()
-    {
-        
-        return $this->harga == $this->dibayar ? 'Lunas' : 'Belum Lunas';
-    }
-    public function getDibayarAttribute()
-    {
-        
-
-        return ATahunan::where('tahunan_id', $this->id)->sum('nominal');
-    }
+   
 
     public function jenisPembayaran()
     {
@@ -41,7 +29,7 @@ class PTahunan extends Model
     }
     public function siswa()
     {
-        return $this->belongsTo(Siswa::class, 'siswa_id', );
+        return $this->belongsToMany(Siswa::class, 'siswa_p_tahunan', 'tahunan_id', 'siswa_id');
     }
     public function tahun()
     {

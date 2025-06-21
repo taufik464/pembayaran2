@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
 
 class transaksi extends Model
 {
@@ -30,12 +32,27 @@ class transaksi extends Model
     }
     public function pBulanan()
     {
-        return $this->hasMany(PBulanan::class, 'transaksi_id');
-
+        return $this->hasManyThrough(
+            PBulanan::class,
+            SiswaBulanan::class,
+            'transaksi_id', // foreign key di siswa_bulanan
+            'id',           // foreign key di p_bulanans
+            'id',           // local key di transaksi
+            'bulanan_id'    // local key di siswa_bulanan
+        );
     }
     public function pTambahan()
     {
         return $this->hasMany(PTambahan::class, 'transaksi_id');
+    }
+    public function siswaBulanan(): HasOne
+    {
+        return $this->hasOne(SiswaBulanan::class, 'transaksi_id');
+    }
+
+    public function siswa()
+    {
+        return $this->siswaBulanan->siswa();
     }
    
 

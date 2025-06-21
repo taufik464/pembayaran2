@@ -7,7 +7,7 @@
             <!-- Modal header -->
             <div class="flex items-center bg-primary justify-between p-2 md:p-4 border-b rounded-t dark:border-gray-600 border-gray-200">
                 <h3 class="text-lg font-semibold text-white dark:text-white">
-                    Tambah Cicilan - {{ $item->jenisPembayaran->nama }}
+                    Tambah Cicilan - {{ $item->nama }}
                 </h3>
                 <button type="button" class="text-white bg-transparent hover:bg-gray-200 hover:text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="cicilanModal-{{ $item->id }}">
                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -29,7 +29,7 @@
                 <div class="col-span-2 flex justify-end">
                     <button type="button" onclick="
                         const jumlahBayar = document.getElementById('jumlah-{{ $item->id }}').value;
-                        tambahPembayaran('{{ $item->id }}', '{{ $item->jenisPembayaran->nama }}', jumlahBayar, 'tahunan')
+                        tambahPembayaran('{{ $item->id }}', '{{ $item->nama }}', jumlahBayar, 'tahunan', '{{ $siswa->id }}')
                     " class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" data-modal-toggle="cicilanModal-{{ $item->id }}">
                         Simpan Pembayaran
                     </button>

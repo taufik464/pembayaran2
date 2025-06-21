@@ -99,10 +99,11 @@
 
                     <button
                         type="button"
+                        id="btnBayar"
                         onclick="prepareModalBayar()"
                         class="w-full mt-4 text-xl font-medium text-center text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-green-300 rounded-full text-sm px-5 py-1 me-2 mb-2"
                         data-modal-target="paymentModal"
-                        data-modal-toggle="paymentModal">
+                        data-modal-toggle="paymentModal" disabled>
                         Bayar
                     </button>
 
@@ -159,7 +160,7 @@
     console.log("File tambahDaftar.js loaded!");
     let daftarPembayaran = [];
 
-    function tambahPembayaran(id, nama, harga, jenis) {
+    function tambahPembayaran(id, nama, harga, jenis, siswaId) {
         const sudahAda = daftarPembayaran.find(item => item.id === id && item.jenis === jenis);
         if (sudahAda) {
             alert("Sudah ditambahkan!");
@@ -170,7 +171,8 @@
             id,
             nama,
             harga: parseFloat(harga),
-            jenis
+            jenis,
+            siswaId
         });
         updateDaftarPembayaran();
     }
@@ -205,7 +207,18 @@
         });
 
         document.getElementById("totalHarga").innerText = "Total: Rp" + total.toLocaleString();
+
+        const btnBayar = document.getElementById("btnBayar");
+        if (daftarPembayaran.length === 0) {
+            btnBayar.disabled = true;
+            btnBayar.classList.add("opacity-50", "cursor-not-allowed");
+        } else {
+            btnBayar.disabled = false;
+            btnBayar.classList.remove("opacity-50", "cursor-not-allowed");
+        }
     }
+
+
 
     function prepareModalBayar() {
         if (daftarPembayaran.length === 0) {

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('p_tambahan', function (Blueprint $table) {
             $table->id();
             $table->foreignId('jenis_pembayaran_id')->constrained('jenis_pembayarans')->onDelete('cascade');
+            $table->foreignId('periode_id')->constrained('periodes')->onDelete('cascade');
             $table->foreignId('siswa_id')->constrained('siswa')->onDelete('cascade');
             $table->foreignId('transaksi_id')->nullable()->constrained('transaksi')->onDelete('cascade');
             $table->decimal('harga', 10, 2);

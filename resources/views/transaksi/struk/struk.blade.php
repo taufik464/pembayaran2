@@ -1,20 +1,6 @@
-<!DOCTYPE html>
-<html lang="id">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Struk Pembayaran</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @media print {
-            @page {
-                size: 80mm auto;
-            }
-        }
-    </style>
-</head>
 
-<body class="bg-white flex items-center justify-center min-h-screen max-h-full">
+<div class=" bg-white text-black">
     <div class="w-[300px] border border-blue-400 p-4 text-sm font-sans">
         <div class="flex justify-center">
             <img src="{{ asset('img/logo_alhikmah.jpg') }}" alt="Application Logo" class="h-20 w-auto fill-current text-gray-800 dark:text-gray-200">
@@ -77,6 +63,5 @@
 
         <p class="text-center font-bold mt-4">-- Terima Kasih --</p>
     </div>
-</body>
+</div>
 
-</html>

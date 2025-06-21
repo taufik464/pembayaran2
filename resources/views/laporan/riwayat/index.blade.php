@@ -25,82 +25,159 @@
         </nav>
     </x-slot>
 
-
-    <div class="bg-white dark:bg-gray-800 rounded-lg text-gray-900 dark:text-gray-100">
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-4 bg-white dark:bg-gray-800">
-            <div class="flex items-center justify-between">
-                <div class="pb-4 bg-white dark:bg-gray-800">
-                    <label for="table-search" class="sr-only">Search</label>
-                    <div class="relative mt-1">
-                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                            </svg>
+    <div class="">
+        <div class="max-w-7xl mx-auto ">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                        <div class="flex items-center justify-between pb-4">
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                    </svg>
+                                </div>
+                                <input type="text" id="search-input" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Cari transaksi...">
+                            </div>
                         </div>
-                        <input type="text" id="table-search" class="block pt-2 ps-10 text-sm text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-700 rounded-lg w-80 bg-gray-50 dark:bg-gray-800 focus:ring-blue-500 focus:border-blue-500" placeholder="Search for items">
+
+                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th scope="col" class="px-3 py-3">No</th>
+                                    <th scope="col" class="px-6 py-3">Tanggal</th>
+                                    <th scope="col" class="px-6 py-3">Nama Siswa</th>
+                                    <th scope="col" class="px-6 py-3">Total Pembayaran</th>
+                                    <th scope="col" class="px-6 py-3">Metode Bayar</th>
+                                    <th scope="col" class="px-6 py-3">Jumlah Uang</th>
+                                    <th scope="col" class="px-6 py-3">Kembalian</th>
+                                    <th scope="col" class="px-6 py-3">Staff</th>
+                                    <th scope="col" class="px-6 py-3">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($riwayat as $index => $item)
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <td class="px-3 py-4">{{ $index + 1 }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $item['tanggal'] }}</td>
+                                    <td class="px-6 py-4">
+
+                                        {{ $item['nama_siswa'] }}
+
+                                    </td>
+                                    <td class="px-6 py-4">Rp {{ number_format($item['total_pembayaran'], 0, ',', '.') }}</td>
+                                    <td class="px-6 py-4">{{ $item['metode_pembayaran'] }}</td>
+                                    <td class="px-6 py-4">Rp {{ number_format($item['jumlah_uang'], 0, ',', '.') }}</td>
+                                    <td class="px-6 py-4">Rp {{ number_format($item['kembalian'], 0, ',', '.') }}</td>
+                                    <td class="px-6 py-4">{{ $item['staff'] }}</td>
+                                    <td class="px-2 py-2 relative" x-data="{ open: false }">
+                                        <button @click="open = !open" class="text-gray-600 hover:text-black focus:outline-none">
+                                            &#8942; <!-- Tiga titik vertikal -->
+                                        </button>
+
+                                        <div x-show="open" @click.away="open = false" class="absolute right-0 z-10 mt-2 w-36 bg-white border rounded shadow-md">
+                                            <button onclick="showDetail('{{ $index }}')" class="w-full text-left block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100">
+                                                Detail
+                                            </button>
+                                            <button class="w-full text-left block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100">
+                                                Cetak Struk
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr id="detail-{{ $index }}" class="hidden bg-gray-50 dark:bg-gray-700">
+                                    <td colspan="9" class="px-6 py-4">
+                                        <div class="mb-2 font-semibold">Detail Pembayaran:</div>
+                                        @foreach($item['detail_pembayaran'] as $detail)
+                                        <div class="mb-1 pl-4">
+                                            • {{ $detail['jenis'] }} - {{ $detail['nama'] }}:
+                                            <span class="font-semibold">Rp {{ number_format($detail['jumlah'], 0, ',', '.') }}</span>
+                                        </div>
+                                        @endforeach
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="9" class="px-6 py-4 text-center">Tidak ada data transaksi</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-               
             </div>
-
-            <table class="w-full mt-2 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-6 py-3 font-medium dark:text-white">
-                            No
-                        </th>
-                        <th scope="col" class="px-6 py-3 font-medium dark:text-white">
-                            Taggal
-                        </th>
-                        <th scope="col" class="px-6 py-3 font-medium dark:text-white">
-                            Nama Siswa
-                        </th>
-                        <th scope="col" class="px-6 py-3 font-medium dark:text-white">
-                            Total Pembayaran
-                        </th>
-                        <th scope="col" class="px-6 py-3 font-medium dark:text-white">
-                            metode Bayar
-                        </th>
-                        <th scope="col" class="px-6 py-3 font-medium dark:text-white">
-                            Jumlah Uang
-                        </th>
-                        <th scope="col" class="px-6 py-3 font-medium dark:text-white">
-                            Staff TU
-                        </th>
-                        <th scope="col" class="px-6 py-3 font-medium dark:text-white">
-                            <span class="sr-only">Edit</span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($riwayat as $r)
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $loop->iteration }}
-                        </td>
-                        <td class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {{ $r['tanggal'] }}
-                        </td>
-                        <td class="px-6 py-3 font-medium dark:text-white">
-                            {{ $r['nama_siswa'] }}
-                        </td>
-                        <td class="px-6 py-3 font-medium dark:text-white">
-                            {{ $r['total_pembayaran'] }}
-                        </td>
-                        <td class="px-6 py-3 font-medium dark:text-white">
-                            {{ $r['metode_pembayaran'] }}
-                        </td>
-                        <td class="px-6 py-3 font-medium dark:text-white">
-                            {{ $r['Jumlah_uang'] }}
-                        </td>
-                        <td class="px-6 py-3 font-medium dark:text-white">
-                            {{ $r['Staff']}}
-                        </td>
-                       
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        // Search functionality yang lebih robust
+        document.getElementById('search-input').addEventListener('input', function() {
+            const searchValue = this.value.toLowerCase().trim();
+            const rows = document.querySelectorAll('tbody tr.bg-white, tbody tr.bg-gray-50');
+
+            rows.forEach(row => {
+                const isDetailRow = row.id.startsWith('detail-');
+                const text = row.textContent.toLowerCase();
+                const shouldShow = text.includes(searchValue);
+
+                // Handle both main rows and detail rows
+                if (shouldShow) {
+                    row.style.display = '';
+                    // Jika ini adalah row utama, pastikan detail row terkait juga ditampilkan jika sedang terbuka
+                    if (!isDetailRow) {
+                        const detailRow = row.nextElementSibling;
+                        if (detailRow && detailRow.classList.contains('bg-gray-50') && !detailRow.classList.contains('hidden')) {
+                            detailRow.style.display = '';
+                        }
+                    }
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // Show/hide detail dengan animasi
+        function showDetail(index) {
+            try {
+                const detailRow = document.getElementById(`detail-${index}`);
+                if (!detailRow) {
+                    console.error(`Detail row with ID detail-${index} not found`);
+                    return;
+                }
+
+                // Toggle dengan animasi
+                if (detailRow.classList.contains('hidden')) {
+                    detailRow.classList.remove('hidden');
+                    detailRow.style.display = '';
+                    detailRow.animate(
+                        [{
+                            opacity: 0
+                        }, {
+                            opacity: 1
+                        }], {
+                            duration: 200,
+                            easing: 'ease-in-out'
+                        }
+                    );
+                } else {
+                    detailRow.animate(
+                        [{
+                            opacity: 1
+                        }, {
+                            opacity: 0
+                        }], {
+                            duration: 200,
+                            easing: 'ease-in-out'
+                        }
+                    ).onfinish = () => {
+                        detailRow.classList.add('hidden');
+                    };
+                }
+            } catch (error) {
+                console.error('Error in showDetail:', error);
+            }
+        }
+    </script>
+    @endpush
 </x-app-layout>

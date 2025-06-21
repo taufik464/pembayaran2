@@ -16,6 +16,7 @@ use App\Http\Controllers\transaksi\transaksiController;
 use App\Http\Controllers\laporan\rekapController;
 use App\Http\Controllers\laporan\riwayatTransaksiConteroller;
 use App\Http\Controllers\aturPembayaran\metodeController;
+use App\Http\Controllers\ExportController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -123,6 +124,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/struk/unduh/{id}', [CetakStrukController::class, 'unduhStruk'])->name('unduh-struk');
 
     Route::get('/rekap', [rekapController::class, 'index'])->name('rekap.index');
+    Route::get('/export-rekap', [ExportController::class, 'exportRekap'])
+        ->name('export.rekap');
 });
 
 require __DIR__.'/auth.php';

@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('a_tahunans', function (Blueprint $table) {
-            $table->id();
+        Schema::create('siswa_p_tahunan', function (Blueprint $table) {
             $table->foreignId('siswa_id')->constrained('siswa')->onDelete('cascade');
-            $table->foreignId('tahunan_id')->constrained('p_tahunans')->onDelete('cascade');
-            $table->foreignId('transaksi_id')->constrained('transaksi')->onDelete('cascade')->nullable();
-            $table->decimal('nominal', 10, 2);
+            $table->foreignId('tahunan_id')->constrained('p_tahunans')->onDelete('cascade');    
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('a_tahunans');
+        Schema::dropIfExists('siswa_p_tahunan');
     }
 };

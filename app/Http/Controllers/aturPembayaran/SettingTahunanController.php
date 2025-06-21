@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\aturPembayaran;
+
 use App\Http\Controllers\Controller;
 use App\Models\Kelas;
 use App\Models\PTahunan;
@@ -48,10 +49,10 @@ class SettingTahunanController extends Controller
             'tahun' => 'required|exists:periodes,id',
             'jenis_pembayaran' => 'required|array',
             'nominal' => 'required|array',
-            'nis' => 'nullable|string'
+            'nis' => 'nullable|string',
         ]);
 
-        // Ambil data siswa berdasarkan input
+        // Ambil daftar siswa
         $siswaList = collect();
 
         if ($request->nis) {
@@ -88,23 +89,31 @@ class SettingTahunanController extends Controller
         try {
             foreach ($siswaList as $siswa) {
                 foreach ($request->jenis_pembayaran as $index => $jenisId) {
-                    $cek = PTahunan::where('siswa_id', $siswa->id)
-                        ->where('tahun_id', $request->tahun)
-                        ->where('jenis_pembayaran_id', $jenisId)
-                        ->first();
-                    if ($cek) {
-                        $sudahAda[] = $siswa->nama . ' (' . $siswa->nis . ') - ' . JenisPembayaran::find($jenisId)->nama;
-                        continue; // Abaikan siswa yang sudah ada
-                    }
-                    PTahunan::create([
-                        'siswa_id' => $siswa->id,
+                    // Cek apakah p_tahunan dengan tahun & jenis pembayaran ini sudah ada
+                    $ptahunan = PTahunan::firstOrCreate([
                         'tahun_id' => $request->tahun,
-                        'jenis_pembayaran_id' => $jenisId,
-                        'harga' => $request->nominal[$index] ?? 0,
+                        'jenis_pembayaran_id' => $jenisId
+                    ], [
+                        'harga' => $request->nominal[$index] ?? 0
                     ]);
-                    $siswaDisimpan[] = $siswa->nama . ' (' . $siswa->nis . ') - ' . JenisPembayaran::find($jenisId)->nama;
+
+                    // Cek apakah siswa sudah terhubung
+                    $alreadyLinked = DB::table('siswa_p_tahunan')
+                        ->where('siswa_id', $siswa->id)
+                        ->where('tahunan_id', $ptahunan->id)
+                        ->exists();
+
+                    if ($alreadyLinked) {
+                        $sudahAda[] = $siswa->nama . ' (' . $siswa->nis . ') - ' . $ptahunan->jenisPembayaran->nama;
+                        continue;
+                    }
+
+                    // Tambahkan ke pivot
+                    $siswa->pTahunan()->attach($ptahunan->id);
+                    $siswaDisimpan[] = $siswa->nama . ' (' . $siswa->nis . ') - ' . $ptahunan->jenisPembayaran->nama;
                 }
             }
+
             DB::commit();
 
             $pesan = [];
@@ -114,6 +123,7 @@ class SettingTahunanController extends Controller
             if (!empty($sudahAda)) {
                 $pesan[] = 'Sudah ada pembayaran untuk: ' . implode(', ', $sudahAda) . '.';
             }
+
             return redirect()->route('setting-tahunan.index')->with('success', implode(' ', $pesan));
         } catch (\Exception $e) {
             DB::rollBack();
@@ -121,7 +131,7 @@ class SettingTahunanController extends Controller
         }
     }
 
-/*
+    /*
     public function destroy($id)
     {
         $pembayaran = PTahunan::findOrFail($id);
