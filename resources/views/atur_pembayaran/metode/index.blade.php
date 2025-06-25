@@ -18,7 +18,7 @@
                         <svg class="rtl:rotate-180 w-2 h-2 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
                         </svg>
-                        <a href="route('metode.index')" class="ms-1 text-xs font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">Data kelas</a>
+                        <a href="route('metode.index')" class="ms-1 text-xs font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">Data Metode Bayar</a>
                     </div>
                 </li>
 
@@ -30,21 +30,10 @@
 
 
     <div class="bg-white rounded-lg text-gray-900 dark:bg-gray-800 dark:text-gray-100">
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-4 ">
-            <div class="flex items-center justify-between">
-                <div class="pb-4 bg-white dark:bg-gray-800">
-                    <label for="tabl</div>e-search" class="sr-only">Search</label>
-                    <div class="relative mt-1">
-                        <div class="absolute inset-y-0 rtl:inset-r-</div>0 start-0 flex items-center ps-3 pointer-events-none">
-                            <svg class="w-4 h-4 text-gray-500 dark:text</div>-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                            </svg>
-                        </div>
-                        <input type="text" id="table-search" class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items">
-                    </div>
-
-                </div>
-                <button data-modal-target="tambahMetodeModal" data-modal-toggle="tambahMetodeModal" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:ring-green-300 dark:bg-green-500 dark:hover:bg-green-600 focus:outline-none dark:focus:ring-green-800">
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-4  ">
+            <div class="flex items-center justify-between ">
+                <x-search action="{{ route('metode.index') }}" />
+                <button data-modal-target="tambahMetodeModal" data-modal-toggle="tambahMetodeModal" class="inline-flex items-center mb-2 px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:ring-green-300 dark:bg-green-500 dark:hover:bg-green-600 focus:outline-none dark:focus:ring-green-800">
                     Tambah Data
                 </button>
                 @include('atur_pembayaran.metode.modal_create_metode')
@@ -85,7 +74,7 @@
                                 <button data-modal-target="editMetodeModal-{{ $m->id }}" data-modal-toggle="editMetodeModal-{{ $m->id }}" class="w-full text-left block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100">Edit</button>
 
 
-                                <form action="{{ route('kelas.destroy', $m->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
+                                <form action="{{ route('metode.destroy', $m->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Hapus</button>

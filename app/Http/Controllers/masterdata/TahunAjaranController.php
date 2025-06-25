@@ -10,11 +10,27 @@ use Illuminate\Support\Facades\DB;
 
 class TahunAjaranController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tahunajarans = periode::all();
+        // Initialize the query
+        $query = periode::query();
+
+        // Check if there is a search term
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('tahun_awal', 'like', "%{$search}%")
+                  ->orWhere('tahun_akhir', 'like', "%{$search}%")
+                  ->orWhere('status', 'like', "%{$search}%");
+            });
+        }
+
+        // Get the filtered results
+        $tahunajarans = $query->get();
+
         return view('masterdata.tahun_ajaran.index', compact('tahunajarans'));
     }
+   
     public function store(Request $request)
     {
         // Validate the request data

@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome2');
-});
+})->name('welcome');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -65,6 +65,7 @@ Route::middleware('auth')->group(function () {
     Route::get('siswa', [SiswaController::class, 'index'])->name('siswa.index');
     Route::get('siswa/create', [SiswaController::class, 'create'])->name('siswa.create');
     Route::post('siswa/store', [SiswaController::class, 'store'])->name('siswa.store');
+    Route::post('/siswa/import', [SiswaController::class, 'import'])->name('siswa.import');
     Route::get('siswa/edit/{nis}', [SiswaController::class, 'edit'])->name('siswa.edit');
     Route::put('siswa/update/{nis}', [SiswaController::class, 'update'])->name('siswa.update');
     Route::delete('siswa/destroy/{nis}', [SiswaController::class, 'destroy'])->name('siswa.destroy');
@@ -75,13 +76,24 @@ Route::middleware('auth')->group(function () {
     Route::post('/naik-kelas/simpan', [naik_KelasController::class, 'simpan'])->name('naik_kelas.simpan');
 
     //Jenis Pembayaran
-    Route::get('jenis-pembayaran', [JenisPembayaranController::class, 'index'])->name('jenis-pembayaran.index');
-    Route::get('jenis-pembayaran/create', [JenisPembayaranController::class, 'create'])->name('jenis-pembayaran.create');
-    Route::post('jenis-pembayaran/store', [JenisPembayaranController::class, 'store'])->name('jenis-pembayaran.store');
-    Route::get('jenis-pembayaran/edit/{id}', [JenisPembayaranController::class, 'edit'])->name('jenis-pembayaran.edit');
-    Route::put('jenis-pembayaran/update/{id}', [JenisPembayaranController::class, 'update'])->name('jenis-pembayaran.update');
-    Route::delete('jenis-pembayaran/destroy/{id}', [JenisPembayaranController::class, 'destroy'])->name('jenis-pembayaran.destroy');
-    Route::get('jenis-pembayaran/show/{id}', [JenisPembayaranController::class, 'show'])->name('jenis-pembayaran.show');
+  Route::get('jenis-pembayaran', [JenisPembayaranController::class, 'index'])->name('jenis-pembayaran.index');
+  Route::get('jenis-pembayaran/create', [JenisPembayaranController::class, 'create'])->name('jenis-pembayaran.create');
+  Route::post('jenis-pembayaran/store', [JenisPembayaranController::class, 'store'])->name('jenis-pembayaran.store');
+    Route::get('jenis-pembayaran/edit/{jenis_pembayaran}', [JenisPembayaranController::class, 'edit'])
+        ->name('jenis-pembayaran.edit');
+    Route::put('jenis-pembayaran/update/{jenis_pembayaran}', [JenisPembayaranController::class, 'update'])->name('jenis-pembayaran.update');
+  Route::delete('jenis-pembayaran/destroy/{id}', [JenisPembayaranController::class, 'destroy'])->name('jenis-pembayaran.destroy');
+
+ // Route::resource('jenis-pembayaran', JenisPembayaranController::class)
+  //      ->except(['show'])
+ //       ->names([
+ //           'index' => 'jenis-pembayaran.index',
+ //           'create' => 'jenis-pembayaran.create',
+ //           'store' => 'jenis-pembayaran.store',
+  //          'edit' => 'jenis-pembayaran.edit',
+ //           'update' => 'jenis-pembayaran.update',
+  //          'destroy' => 'jenis-pembayaran.destroy',
+   //     ]);
 
 
     //Metode Bayar
@@ -128,4 +140,4 @@ Route::middleware('auth')->group(function () {
         ->name('export.rekap');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

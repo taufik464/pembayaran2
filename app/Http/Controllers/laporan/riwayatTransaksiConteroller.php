@@ -26,6 +26,7 @@ class riwayatTransaksiConteroller extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+
         $riwayat = [];
 
         foreach ($transaksis as $transaksi) {
@@ -33,25 +34,33 @@ class riwayatTransaksiConteroller extends Controller
             $namaSiswa = null;
             $totalPembayaran = 0;
 
-            // Handle Pembayaran Bulanan (many-to-many)
-            if (isset($transaksi->siswaBulanan) && is_iterable($transaksi->siswaBulanan)) {
-                foreach ($transaksi->siswaBulanan as $siswaBulanan) {
-                    if (isset($siswaBulanan->bulanan) && isset($siswaBulanan->siswa)) {
-                        $totalPembayaran += $siswaBulanan->bulanan->harga ?? 0;
-                        $detailPembayaran[] = [
-                            'jenis' => 'Bulanan',
-                            'nama' => optional($siswaBulanan->bulanan->jenisPembayaran)->nama ?? 'Jenis Pembayaran Tidak Diketahui',
-                            'jumlah' => $siswaBulanan->bulanan->harga ?? 0,
-                            'siswa_id' => $siswaBulanan->siswa->id ?? null,
-                            'siswa_nama' => $siswaBulanan->siswa->nama ?? 'Siswa Tidak Diketahui'
-                        ];
+            $siswaBulanan = $transaksi->siswaBulanan;
 
-                        if (!$namaSiswa && isset($siswaBulanan->siswa->nama)) {
-                            $namaSiswa = $siswaBulanan->siswa->nama;
-                        }
-                    }
+            // Tahap 1: Cek apakah $siswaBulanan ada
+            if ($siswaBulanan && isset($siswaBulanan->bulanan) && isset($siswaBulanan->siswa)) {
+
+                $harga = $siswaBulanan->bulanan->harga ?? 0;
+
+                $totalPembayaran += $harga;
+
+                $detailPembayaran[] = [
+                    'jenis' => 'Bulanan',
+                    'nama' => optional($siswaBulanan->bulanan->jenisPembayaran)->nama ?? 'Jenis Pembayaran Tidak Diketahui',
+                    'jumlah' => $harga,
+                    'siswa_id' => $siswaBulanan->siswa->id ?? null,
+                    'siswa_nama' => $siswaBulanan->siswa->nama ?? 'Siswa Tidak Diketahui'
+                ];
+
+                // Tahap 5: Simpan nama siswa pertama jika belum ada
+                if (!$namaSiswa && isset($siswaBulanan->siswa->nama)) {
+                    $namaSiswa = $siswaBulanan->siswa->nama;
                 }
             }
+
+
+
+
+
 
 
             // Handle Pembayaran Tahunan
@@ -100,6 +109,7 @@ class riwayatTransaksiConteroller extends Controller
                     ];
                 }
             }
+            
         
 
             $riwayat[] = [
@@ -109,12 +119,14 @@ class riwayatTransaksiConteroller extends Controller
                 'total_pembayaran' => $totalPembayaran,
                 'metode_pembayaran' => optional($transaksi->metodeBayar)->nama ?? '-',
                 'jumlah_uang' => $transaksi->uang_bayar,
-                'kembalian' => $transaksi->uang_kembali,
+                'kembalian' => $transaksi->uang_bayar - $totalPembayaran,
                 'staff' => optional($transaksi->user->staff)->nama ?? 'Admin',
                 'detail_pembayaran' => $detailPembayaran,
-                'transaksi_id' => $transaksi->id
+                'transaksi_id' => $transaksi->id,
+
             ];
         }
+      
     
         return view('laporan.riwayat.index', compact('riwayat'));
     }

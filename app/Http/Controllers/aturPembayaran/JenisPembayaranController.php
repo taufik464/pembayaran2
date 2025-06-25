@@ -13,9 +13,18 @@ class JenisPembayaranController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $jenis_pembayaran = JenisPembayaran::all();
+        $query = JenisPembayaran::query();
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where('nama', 'like', '%' . $search . '%')
+                  ->orWhere('tipe_pembayaran', 'like', '%' . $search . '%');
+        }
+
+        $jenis_pembayaran = $query->get();
+
         return view('atur_pembayaran.jenis_pembayaran.index', compact('jenis_pembayaran'));
     }
 
@@ -54,65 +63,37 @@ class JenisPembayaranController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
-    {
-        // Ambil data jenis pembayaran beserta relasi periode-nya
-        $pembayaran = JenisPembayaran::with('periode')->findOrFail($id);
-
-        // Inisialisasi variabel collection kosong supaya selalu ada
-        $bulanan = collect();
-        $tahunan = collect();
-
-        if ($pembayaran->tipe_pembayaran === 'Bulanan') {
-            $bulanan = PBulanan::with(['siswa.kelas'])
-                ->where('jenis_pembayaran_id', $id)
-                ->get()
-                ->groupBy('siswa_id')
-                ->map(function ($items) {
-                    $first = $items->first();
-                    $semuaLunas = $items->every(fn($item) => $item->status === 'Lunas');
-                    return (object) [
-                        'siswa_id' => $first->siswa_id,
-                        'nama' => $first->siswa->nama ?? '-',
-                        'kelas' => $first->siswa->kelas->nama_kelas ?? '-',
-                        'harga' => $items->sum('harga'),
-                        'status' => $semuaLunas ? 'Lunas' : 'Belum Lunas',
-                    ];
-                })
-                ->values();
-        } elseif ($pembayaran->tipe_pembayaran === 'Tahunan') {
-            $tahunan = PTahunan::with(['siswa.kelas'])
-                ->where('jenis_pembayaran_id', $id)
-                ->get();
-        }
-
-        // Kirim data ke view, termasuk bulanan dan tahunan
-        return view('atur_pembayaran.jenis_pembayaran.show', compact('pembayaran', 'bulanan', 'tahunan'));
-    }
+    
 
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(JenisPembayaran $jenis_pembayaran)
+    public function edit($jenis_pembayaran)
     {
-        $tipe = ['Bulanan', 'Tahunan'];
-        $tahun = Periode::all();
-        return view('atur_pembayaran.jenis_pembayaran.edit', compact('jenis_pembayaran', 'tipe', 'tahun'));
-    }
 
+        
+        $jenis_pembayaran = JenisPembayaran::findOrFail($jenis_pembayaran);
+       
+        $tipe = ['Bulanan', 'Tahunan', 'Tambahan'];
+        return view('atur_pembayaran.jenis_pembayaran.edit', compact('jenis_pembayaran', 'tipe'));
+       
+    }
     public function update(Request $request, JenisPembayaran $jenis_pembayaran)
     {
+      
         $request->validate([
             'nama' => 'required',
             'tipe' => 'required',
-            'periode_id' => 'required',
+            'harga' => 'required|numeric',
+           
         ]);
 
         $jenis_pembayaran->update([
             'nama' => $request->nama,
             'tipe_pembayaran' => $request->tipe,
-            'periode_id' => $request->periode_id,
+            'harga' => $request->harga,
+           
         ]);
 
         return redirect()->route('jenis-pembayaran.index')->with('success', 'Data berhasil diubah');

@@ -8,10 +8,20 @@ use Illuminate\Http\Request;
 
 class kelasController extends Controller
 {
-    public function DaftarKelas()
+    public function DaftarKelas(Request $request)
     {
+        $query = Kelas::query();
 
-        $kelass = Kelas::all();
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%")
+              ->orWhere('tingkatan', 'like', "%{$search}%")
+              ->orWhere('status', 'like', "%{$search}%");
+            });
+        }
+
+        $kelass = $query->get();
         return view('masterdata.kelas.index', compact('kelass'));
     }
 

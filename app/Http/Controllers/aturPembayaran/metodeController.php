@@ -8,10 +8,16 @@ use App\Models\Metode;
 
 class metodeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $query = Metode::query();
 
-        $metode = Metode::all();
+        if ($request->has('search') && !empty($request->search)) {
+            $query->where('nama', 'like', '%' . $request->search . '%');
+        }
+
+        $metode = $query->get();
+
         return view('atur_pembayaran.metode.index', compact('metode'));
     }
 

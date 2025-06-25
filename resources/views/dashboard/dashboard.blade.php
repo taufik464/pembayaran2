@@ -16,19 +16,22 @@
             <!-- Pendapatan Keseluruhan -->
             <div class="bg-blue-100 rounded-2xl p-4 shadow-sm">
                 <p class="text-sm text-gray-600 mb-1">Pendapatan Keseluruhan</p>
-                <p class="text-xl font-semibold">Rp. 100 JT</p>
+                <p class="text-xl font-semibold">
+                    Rp. {{ number_format($totalPeriode, 0, ',', '.') }}
+                </p>
+                </p>
             </div>
 
             <!-- Estimasi Pendapatan -->
             <div class="bg-violet-100 rounded-2xl p-4 shadow-sm">
                 <p class="text-sm text-gray-600 mb-1">Estimasi Pendapatan</p>
-                <p class="text-xl font-semibold">Rp. 500 JT</p>
+                <p class="text-xl font-semibold"> Rp. {{ number_format($totalestimasi, 0, ',', '.') }}</p>
             </div>
 
             <!-- Jumlah Siswa -->
             <div class="bg-blue-100 rounded-2xl p-4 shadow-sm">
                 <p class="text-sm text-gray-600 mb-1">Siswa</p>
-                <p class="text-xl font-semibold">2,318</p>
+                <p class="text-xl font-semibold">{{ $jumlahSiswa}}</p>
             </div>
         </div>
     </div>

@@ -17,10 +17,15 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create(): View
+    public function create(): View|RedirectResponse
     {
-        return view('auth.register');
+        if (User::exists()) {
+            return redirect()->route('welcome');
+        } else {
+            return view('auth.register');
+        }
     }
+    
 
     /**
      * Handle an incoming registration request.
@@ -35,10 +40,16 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        if (User::exists()) {
+            return redirect()->route('welcome');
+        }
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'staff'
+           
         ]);
 
         event(new Registered($user));

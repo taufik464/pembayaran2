@@ -80,7 +80,7 @@
                         <button class="bg-gray-400 text-white px-4 py-2 rounded inline-flex items-center cursor-not-allowed" disabled>
                             <i class="fas fa-file-excel mr-2"></i> Export Excel
                         </button>
-                        <p class="text-sm text-gray-500 mt-1">Pilih kelas dan tahun ajaran terlebih dahulu</p>
+                      
                         @endif
                     </form>
 

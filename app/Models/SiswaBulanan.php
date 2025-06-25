@@ -9,7 +9,10 @@ class SiswaBulanan extends Pivot
     protected $table = 'siswa_bulanan';
     
     // Tambahkan ini jika menggunakan incrementing ID di pivot table
-    public $incrementing = true;
+    public $incrementing = false;
+   
+    protected $primaryKey = ['siswa_id', 'bulanan_id'];
+    public $timestamps = false;
     
     protected $fillable = [
         'siswa_id', 'bulanan_id', 'transaksi_id'
@@ -17,7 +20,7 @@ class SiswaBulanan extends Pivot
 
     public function siswa()
     {
-        return $this->belongsTo(Siswa::class, 'siswa_id', 'nis');
+        return $this->belongsTo(Siswa::class, 'siswa_id', );
     }
 
     public function bulanan()

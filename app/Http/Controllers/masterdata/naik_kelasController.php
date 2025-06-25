@@ -42,7 +42,7 @@ class naik_kelasController extends Controller
                 ->with('success', 'Siswa berhasil dipindahkan ke kelas tujuan.');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+                ->with('error', 'Terjadi kesalahan: ' );
         }
     }
 }

@@ -55,7 +55,7 @@
                         <div class="grid md:grid-cols-2 md:gap-6 items-center mt-auto">
                             <div class="mb-6 mt-4">
                                 <label for="nama" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Nama</label>
-                                <input type="text" name="nama" id="nama" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Nama">
+                                <input type="text" name="nama" id="nama" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Nama" required>
                             </div>
                             <div class="mt-auto">
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="foto">Upload file</label>

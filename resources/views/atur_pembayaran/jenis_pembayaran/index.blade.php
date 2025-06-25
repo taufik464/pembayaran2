@@ -27,9 +27,7 @@
 
     <div class="p-6 mt-4 bg-white dark:bg-gray-800 rounded-lg shadow">
         <div class="flex justify-between items-center mb-4">
-            <div class="flex items-center space-x-2">
-                <input type="text" placeholder="Search..." class="border p-2 rounded w-64 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600">
-            </div>
+            <x-search action="{{ route('jenis-pembayaran.index') }}" />
             <div class="flex items-center space-x-2">
                 <a type="button" href="{{ route('setting-bulanan.index') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm text-center leading-tight w-fit block">
                     Setting Bulanan
@@ -46,7 +44,7 @@
                 <tr class="bg-gray-100 dark:bg-gray-700">
                     <th class="px-4 py-2 text-gray-700 dark:text-gray-200">#</th>
                     <th class="px-4 py-2 text-gray-700 dark:text-gray-200">Nama Pembayaran</th>
-                    <th class="px-4 py-2 text-gray-700 dark:text-gray-200">Tahun</th>
+                    <th class="px-4 py-2 text-gray-700 dark:text-gray-200">Harga</th>
                     <th class="px-4 py-2 text-gray-700 dark:text-gray-200">Tipe</th>
                     <th class="px-4 py-2 text-gray-700 dark:text-gray-200">Aksi</th>
                 </tr>
@@ -63,8 +61,7 @@
                             &#8942;
                         </button>
                         <div x-show="open" @click.away="open = false" class="absolute right-0 z-10 mt-2 w-36 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-md">
-                            <a href="{{ route('jenis-pembayaran.show', ['id' => $item->id]) }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Detail</a>
-                            <a href="{{ route('jenis-pembayaran.edit', $item->id) }}" class="block px-4 py-2 text-sm text-blue-600 dark:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700">Edit</a>
+                            <a href="{{ route('jenis-pembayaran.edit', ['jenis_pembayaran' => $item->id]) }}" class="block px-4 py-2 text-sm text-blue-600 dark:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700">Edit</a>
                             <form action="{{ route('jenis-pembayaran.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
                                 @csrf
                                 @method('DELETE')

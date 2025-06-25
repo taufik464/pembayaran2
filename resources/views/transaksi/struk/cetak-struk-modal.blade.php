@@ -65,7 +65,11 @@
 
         // Cetak isi modal
         printBtn.addEventListener('click', () => {
-            const printContents = modalBody.innerHTML;
+            const printContents = `
+        <div class="print-struk" style="width:80mm;margin:0 auto;">
+            ${modalBody.innerHTML}
+        </div>
+    `;
 
             // Buat iframe tersembunyi
             const printFrame = document.createElement('iframe');
@@ -86,8 +90,12 @@
                 @page { size: 80mm auto; margin: 0; }
             </style>
         </head>
-        <body>${printContents}</body>
-        </html>
+        <body>
+        ${printContents}
+         
+    </body>
+
+    </html>
     `);
             doc.close();
 

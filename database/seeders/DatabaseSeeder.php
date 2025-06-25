@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             periodeSeeder::class,
             KelasSeeder::class,
             SiswaSeeder::class,
+            JenisPembayaranSeeder::class,
         ]);// User::factory(10)->create();
 
         User::factory()->create([

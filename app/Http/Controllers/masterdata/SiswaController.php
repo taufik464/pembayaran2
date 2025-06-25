@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Siswa;
 use App\Models\Kelas;
+use Rap2hpoutre\FastExcel\FastExcel;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
@@ -39,12 +40,36 @@ class SiswaController extends Controller
         return view('masterdata.siswa.tambah', compact('kelas'));
     }
 
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:xlsx,xls',
+        ]);
+
+        $path = $request->file('file')->getRealPath();
+
+        (new FastExcel)->import($path, function ($row) {
+            return Siswa::updateOrCreate(
+                ['nis' => $row['nis']],
+                [
+                    'nis' => $row['nis'],
+                    'nisn' => $row['nisn'],
+                    'nama' => $row['nama'],
+                    'kelas_id' => $row['kelas'],
+                    'no_hp' => $row['nohp'],   
+                ]
+            );
+        });
+
+        return back()->with('success', 'Data siswa berhasil diimpor!');
+    }
+
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'nis' => 'required|string|max:255|unique:siswa',
-            'nisn' => 'required|string|max:255|unique:siswa',
+            'nama' => 'required|string|max:100',
+            'nis' => 'required|string|unique:siswa',
+            'nisn' => 'required|string|unique:siswa',
             'kelas_id' => 'required|exists:kelas,id',
             'no_hp' => 'nullable|string|max:15',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
